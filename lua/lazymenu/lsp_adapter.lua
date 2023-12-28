@@ -1,4 +1,5 @@
 Utils = require("lazymenu.utils")
+---@class LazyMenuLspAdapter
 local M = {}
 
 function M.setup(remap_cb)

@@ -1,5 +1,6 @@
 local M = {}
 
+---@class LazyMenuOptions
 local defaults = {
   -- example: mappings = {{ "<leader>c", "<leader>C" }},
   mappings = {},

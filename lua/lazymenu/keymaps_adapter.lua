@@ -1,4 +1,5 @@
 Utils = require("lazymenu.utils")
+---@class LazyMenuKeymapsAdapter
 local M = {}
 
 function M.setup(mapping)
