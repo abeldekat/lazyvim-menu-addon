@@ -20,15 +20,15 @@ end
 
 -- Remaps keys defined in LazyVim's keymaps.lua
 -- Is activated when LazyVim is loaded
-local function remap_keymaps(remap_keymaps_cb, mappings)
+local function remap_keymaps(safe_keymap_set_cb, to_change)
   -- See lazyvim.util.init.safe_keymap_set
   return function(mode, lhs, rhs, opts)
-    for _, mapping in ipairs(mappings) do
-      if lhs:find(mapping[1], 1, true) then
-        lhs = lhs:gsub(mapping[1], mapping[2])
+    for key, value in pairs(to_change) do
+      if lhs:find(key, 1, true) then
+        lhs = lhs:gsub(key, value)
       end
     end
-    remap_keymaps_cb(mode, lhs, rhs, opts)
+    safe_keymap_set_cb(mode, lhs, rhs, opts)
   end
 end
 
@@ -37,16 +37,16 @@ end
 -- Remaps keys in LazyVim's lsp plugins definitions after the plugin has been added
 -- Is activated when LazyVim is loaded
 ---@param resolve_lsp_cb fun(spec?:(string|LazyKeysSpec)[])
----@param mappings string[]
-local function remap_lsp(resolve_lsp_cb, mappings)
+---@param to_change table<string,string>
+local function remap_lsp(resolve_lsp_cb, to_change)
   -- See lazy.core.handler.keys.resolve
   ---@param spec? (string|LazyKeysSpec)[]
   return function(spec)
     if spec and type(spec) == "table" then
       spec = vim.tbl_map(function(spec_item)
-        for _, mapping in ipairs(mappings) do
-          if spec_item[1]:find(mapping[1], 1, true) then
-            spec_item[1] = spec_item[1]:gsub(mapping[1], mapping[2])
+        for key, value in pairs(to_change) do
+          if spec_item[1]:find(key, 1, true) then
+            spec_item[1] = spec_item[1]:gsub(key, value)
           end
         end
         return spec_item
@@ -57,45 +57,43 @@ local function remap_lsp(resolve_lsp_cb, mappings)
 end
 
 -- Remaps keys in LazyVim's plugin definitions after the plugin has been added
----@param add_fragment_cb fun(_, plugin:LazyPlugin, results?:string[])
----@param mappings string[]
-local function remap(add_fragment_cb, mappings)
+---@param add_cb fun(_, plugin:LazyPlugin, results?:string[])
+---@param to_change table<string,string>
+local function remap(add_cb, to_change)
   -- See lazy.core.plugins.spec.add
   ---@param plugin LazyPlugin
   ---@param results? string[]
   return function(_, plugin, results)
     local fragment_has_keys = plugin and type(plugin) == "table" and plugin.keys and type(plugin.keys) == "table"
-    plugin = add_fragment_cb(_, plugin, results) -- add and merge the fragment
+    plugin = add_cb(_, plugin, results) -- add and merge the fragment
 
     if fragment_has_keys and plugin._.module and plugin._.module:find("lazyvim", 1, true) then
-      local has_remap = false
-      local new_keys = vim.tbl_map(function(lazy_mapping)
-        for _, mapping in ipairs(mappings) do
-          if lazy_mapping[1]:find(mapping[1], 1, true) then
-            has_remap = true
-            lazy_mapping[1] = lazy_mapping[1]:gsub(mapping[1], mapping[2])
+      plugin.keys = vim.tbl_map(function(lazy_mapping)
+        for key, value in pairs(to_change) do
+          if lazy_mapping[1]:find(key, 1, true) then
+            lazy_mapping[1] = lazy_mapping[1]:gsub(key, value)
           end
         end
         return lazy_mapping
       end, plugin.keys)
-      -- vim.print("Remapping: " .. plugin.name .. " " .. vim.inspect(has_remap))
-      plugin.keys = has_remap and new_keys or plugin.keys
     end
     return plugin
   end
 end
 
----@param mappings string[]
+---@param to_change table<string,string>
 ---@param leaders string[]
 ---@return string[]
-local function reduce(mappings, leaders)
-  return vim.tbl_map(function(mapping)
+local function reduce(to_change, leaders)
+  local result = {}
+  for key, value in pairs(to_change) do
     for _, leader in ipairs(leaders) do
-      if mapping[1] == leader then
-        return mapping
+      if key == leader then
+        result[key] = value
       end
     end
-  end, mappings)
+  end
+  return result
 end
 
 -- The main init method, called when the import is required by lazy.nvim
@@ -108,16 +106,16 @@ function M.on_hook(plugin_adapter, lsp_adapter, keymaps_adapter)
     return {}
   end
 
-  plugin_adapter.setup(remap, opts.mappings)
+  plugin_adapter.setup(remap, opts.to_change)
 
-  local lsp_mappings = reduce(opts.mappings, lsp_adapter.leaders())
-  if not vim.tbl_isempty(lsp_mappings) then
-    lsp_adapter.setup(remap_lsp, lsp_mappings)
+  local lsp_to_change = reduce(opts.to_change, lsp_adapter.leaders())
+  if not vim.tbl_isempty(lsp_to_change) then
+    lsp_adapter.setup(remap_lsp, lsp_to_change)
   end
 
-  local keymaps_mappings = reduce(opts.mappings, keymaps_adapter.leaders())
-  if not vim.tbl_isempty(keymaps_mappings) then
-    keymaps_adapter.setup(remap_keymaps, keymaps_mappings)
+  local keymaps_to_change = reduce(opts.to_change, keymaps_adapter.leaders())
+  if not vim.tbl_isempty(keymaps_to_change) then
+    keymaps_adapter.setup(remap_keymaps, keymaps_to_change)
   end
 
   return {}
