@@ -15,11 +15,11 @@ end
 
 ---@generic T fun(_, plugin:LazyPlugin, results?:string[])
 ---@param remap_cb fun(add_fragment_cb: T, opts:LazyMenuOptions):T
----@param opts LazyMenuOptions
-function M.setup(remap_cb, opts)
+---@param mappings string[]
+function M.setup(remap_cb, mappings)
   local Spec = require("lazy.core.plugin").Spec
   local add_orig = Spec.add
-  local add_decorated = remap_cb(add_orig, opts)
+  local add_decorated = remap_cb(add_orig, mappings)
 
   ---@diagnostic disable-next-line: duplicate-set-field
   Spec.add = function(_, plugin, results)
