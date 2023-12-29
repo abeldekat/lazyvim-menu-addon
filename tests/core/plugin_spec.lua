@@ -31,7 +31,7 @@ describe("a leader key", function()
   end)
 end)
 
--- NOTE: with lazy.nvim, this alsow works with multiple which-key fragments
+-- NOTE: with lazy.nvim, this also works with multiple which-key fragments
 -- that might have opts as a function
 --
 describe("which-keys menu items", function()

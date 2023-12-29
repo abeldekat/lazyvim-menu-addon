@@ -15,12 +15,10 @@ end
 ---@param opts LazyMenuOptions
 ---@return LazyMenuPluginAdapter
 function M.plugin(opts, decorators)
+  -- stylua: ignore
   return {
-    get_opts = function()
-      return opts
-    end,
+    get_opts = function() return opts end,
     setup = function(remap_cb, to_change)
-      -- stylua: ignore
       local add_decorated = remap_cb(function(_, plugin, _) return plugin end, to_change)
       decorators["plugin"] = add_decorated
     end,
@@ -42,9 +40,6 @@ end
 ---@return LazyMenuLspAdapter
 function M.lsp(decorators)
   return {
-    leaders = function()
-      return {}
-    end,
     setup = function(remap_cb, to_change)
       local resolve_decorated = remap_cb(function() end, to_change)
       decorators["lsp"] = resolve_decorated
@@ -55,9 +50,6 @@ end
 ---@return LazyMenuKeymapsAdapter
 function M.keymaps(decorators)
   return {
-    leaders = function()
-      return {}
-    end,
     setup = function(remap_cb, to_change)
       local safe_keymap_set_decorated = remap_cb(function() end, to_change)
       decorators["keymaps"] = safe_keymap_set_decorated
@@ -108,6 +100,7 @@ function M.activate(opts, spec)
 
   local dummy_spec = require("lazymenu").on_hook(fake_adapters, domain)
   run(decorators, spec) -- all hooks are ready: run
+
   return dummy_spec
 end
 
