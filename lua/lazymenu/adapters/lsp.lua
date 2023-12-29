@@ -1,12 +1,7 @@
-Utils = require("lazymenu.utils")
+Utils = require("lazymenu.adapters.utils")
 
 ---@class LazyMenuLspAdapter
 local M = {}
-
----@return string[]
-function M.leaders()
-  return { "<leader>c" }
-end
 
 ---@param remap_cb fun(resolve_lsp_cb:fun(), to_change:table<string,string>)
 ---@param to_change table<string,string>

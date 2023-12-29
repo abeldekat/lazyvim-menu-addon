@@ -1,4 +1,5 @@
 local M = {}
+
 -- TODO: copied from lazyvim.util.init.lua
 ---@param name string
 ---@param fn fun(name:string)
@@ -18,4 +19,5 @@ function M.on_load(name, fn)
     })
   end
 end
+
 return M

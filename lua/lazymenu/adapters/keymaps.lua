@@ -1,23 +1,7 @@
-Utils = require("lazymenu.utils")
+Utils = require("lazymenu.adapters.utils")
 
 ---@class LazyMenuKeymapsAdapter
 local M = {}
-
----@return string[]
-function M.leaders()
-  -- The leaders used in keymaps.lua: Only leader s is not used
-  return {
-    "<leader><tab>",
-    "<leader>b",
-    "<leader>c",
-    "<leader>f",
-    "<leader>g",
-    "<leader>q",
-    "<leader>u",
-    "<leader>w",
-    "<leader>x",
-  }
-end
 
 ---@param remap_cb fun(safe_keymap_set_cb:fun(), to_change:table<string,string>)
 ---@param to_change table<string,string>

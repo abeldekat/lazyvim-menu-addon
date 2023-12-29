@@ -80,8 +80,9 @@ end
 -- activate lazymenu. See lazymenu.hook
 ---@param opts LazyMenuOptions
 function M.activate(opts, spec)
-  -- contains decorated functions, defined in the adapters
+  -- contains the decorated functions created in the adapters
   local decorators = {}
+
   ---@type LazyMenuAdapters
   local fake_adapters = {
     plugin = M.plugin(opts, decorators),
@@ -90,7 +91,15 @@ function M.activate(opts, spec)
     keymaps = M.keymaps(decorators),
   }
 
-  local dummy_spec = require("lazymenu").on_hook(fake_adapters)
+  ---@type LazyMenuDomain
+  local domain = {
+    plugin = require("lazymenu.domain.plugin"),
+    which_key = require("lazymenu.domain.which_key"),
+    lsp = require("lazymenu.domain.lsp"),
+    keymaps = require("lazymenu.domain.keymaps"),
+  }
+
+  local dummy_spec = require("lazymenu").on_hook(fake_adapters, domain)
   run(decorators, spec) -- all hooks are ready: run
   return dummy_spec
 end
