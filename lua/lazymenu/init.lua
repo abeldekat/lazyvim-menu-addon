@@ -1,19 +1,8 @@
---[[
-TODO: Make the lsp and keymaps leaders configurable
-
-Example: Rename leader c to leader C:
---> Mason: from plugin
---> Format Injected Langs: from plugin
---> LSP items: The keys are created on_attach for each buffer:
-  source action, code action, lsp info, rename
---> Config.keymaps.lua: Format and Line diagnostics
---> Which-key: the ["<leader>c"] = "+coding" definition in opts.defaults
---]]
 local M = {}
 
--- The leaders that should trigger lsp remapping or keymaps remapping
+-- Given opts.to_change, only remap for lsp or keymaps when needed
 -- stylua: ignore
-local leaders = {
+local leaders_for = {
   -- The leaders containing lsp items
   lsp = { "<leader>c"},
 
@@ -62,11 +51,11 @@ function M.on_hook(adapters, domain)
   adapters.plugin.setup(domain.plugin.remap, opts.to_change)
   adapters.which_key.setup(domain.which_key.remap, opts.to_change)
 
-  local lsp_to_change = reduce(opts.to_change, leaders.lsp)
+  local lsp_to_change = reduce(opts.to_change, leaders_for.lsp)
   if not vim.tbl_isempty(lsp_to_change) then
     adapters.lsp.setup(domain.lsp.remap, lsp_to_change)
   end
-  local keymaps_to_change = reduce(opts.to_change, leaders.keymaps)
+  local keymaps_to_change = reduce(opts.to_change, leaders_for.keymaps)
   if not vim.tbl_isempty(keymaps_to_change) then
     adapters.keymaps.setup(domain.keymaps.remap, keymaps_to_change)
   end

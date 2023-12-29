@@ -1,10 +1,12 @@
 local M = {}
 
-function M.all_keys(spec)
+function M.lazy_keys_result(spec)
   local result = {}
   for _, plugin in ipairs(spec) do
-    for _, key in ipairs(plugin.keys) do
-      table.insert(result, key[1])
+    if plugin.keys then
+      for _, key in ipairs(plugin.keys) do
+        table.insert(result, key[1])
+      end
     end
   end
   return result
@@ -29,7 +31,9 @@ end
 function M.which_key(decorators)
   return {
     setup = function(remap_cb, to_change)
-      local values_decorated = remap_cb(function() end, to_change)
+      local values_decorated = remap_cb(function(_, plugin, _, _)
+        return plugin.opts
+      end, to_change)
       decorators["which_key"] = values_decorated
     end,
   }
@@ -66,9 +70,12 @@ local function run(decorators, spec)
   for _, plugin in ipairs(spec) do
     decorators.plugin(_, plugin) -- lazy.nvim: parsing the spec
   end
-  -- for _, plugin in ipairs(spec) do
-  --   -- decorators.which_key() -- lazy.nvim: loading plugins
-  -- end
+  for _, plugin in ipairs(spec) do
+    if plugin.opts then
+      plugin.opts = decorators.which_key(_, plugin, "opts", _) -- lazy.nvim: loading plugins
+    end
+  end
+
   -- for _, plugin in ipairs(spec) do
   --   -- decorators.lsp() -- LazyVim: attaching lsp
   -- end
