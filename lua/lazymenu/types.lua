@@ -1,0 +1,5 @@
+---@class LazyMenuAdapters
+---@field plugin LazyMenuPluginAdapter
+---@field which_key LazyMenuWhichKeyAdapter
+---@field lsp LazyMenuLspAdapter
+---@field keymaps LazyMenuKeymapsAdapter

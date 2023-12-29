@@ -1,4 +1,6 @@
 --[[
+TODO: Make the lsp and keymaps leaders configurable
+
 Example: Rename leader c to leader C:
 --> Mason: from plugin
 --> Format Injected Langs: from plugin
@@ -9,7 +11,7 @@ Example: Rename leader c to leader C:
 --]]
 local M = {}
 
--- return the opts for this plugin
+-- Return the opts for this plugin
 ---@param adapter LazyMenuPluginAdapter
 ---@return LazyMenuOptions
 local function get_opts(adapter)
@@ -18,14 +20,16 @@ local function get_opts(adapter)
   return opts
 end
 
+-- The fragment of a plugin is defined in LazyVim, not by the user
 ---@param plugin LazyPlugin
 local function is_lazyvim_fragment(plugin)
   return plugin and plugin._ and plugin._.module and plugin._.module:find("lazyvim", 1, true)
 end
 
+-- Reduce the "to_change" table to contain only leaders defined in "leaders"
 ---@param to_change table<string,string>
 ---@param leaders string[]
----@return string[]
+---@return table<string,string>
 local function reduce(to_change, leaders)
   local result = {}
   for key, value in pairs(to_change) do
@@ -120,7 +124,7 @@ local function remap_plugins(add_cb, to_change)
     local fragment_has_keys = plugin and type(plugin) == "table" and plugin.keys and type(plugin.keys) == "table"
     plugin = add_cb(_, plugin, results) -- add and merge the fragment
     if not is_lazyvim_fragment(plugin) then
-      return plugin -- only change LazyVim's definitions
+      return plugin -- do not change plugin fragments defined by the user
     end
 
     if fragment_has_keys then
@@ -141,30 +145,28 @@ end
 function M.setup(_) end
 
 -- The main init method, called when the import is required by lazy.nvim
----@param plugin_adapter LazyMenuPluginAdapter
----@param which_key_adapter LazyMenuWhichKeyAdapter
----@param lsp_adapter LazyMenuLspAdapter
----@param keymaps_adapter LazyMenuKeymapsAdapter
+---@param adapters LazyMenuAdapters
 ---@return table
-function M.on_hook(plugin_adapter, which_key_adapter, lsp_adapter, keymaps_adapter)
-  local opts = get_opts(plugin_adapter)
-  if not opts or vim.tbl_isempty(opts) then
+function M.on_hook(adapters)
+  local opts = get_opts(adapters.plugin)
+  if not (opts and opts.to_change and type(opts.to_change) == "table" and not vim.tbl_isempty(opts.to_change)) then
     return {}
   end
 
-  plugin_adapter.setup(remap_plugins, opts.to_change)
-  which_key_adapter.setup(remap_which_key, opts.to_change)
+  adapters.plugin.setup(remap_plugins, opts.to_change)
+  adapters.which_key.setup(remap_which_key, opts.to_change)
 
-  local lsp_to_change = reduce(opts.to_change, lsp_adapter.leaders())
+  local lsp_to_change = reduce(opts.to_change, adapters.lsp.leaders())
   if not vim.tbl_isempty(lsp_to_change) then
-    lsp_adapter.setup(remap_lsp, lsp_to_change)
+    adapters.lsp.setup(remap_lsp, lsp_to_change)
   end
 
-  local keymaps_to_change = reduce(opts.to_change, keymaps_adapter.leaders())
+  local keymaps_to_change = reduce(opts.to_change, adapters.keymaps.leaders())
   if not vim.tbl_isempty(keymaps_to_change) then
-    keymaps_adapter.setup(remap_keymaps, keymaps_to_change)
+    adapters.keymaps.setup(remap_keymaps, keymaps_to_change)
   end
 
+  -- All code is injected, return a dummy spec:
   return {}
 end
 

@@ -15,13 +15,13 @@ describe("a leader key", function()
         keys = { { "<leader>ff", dummy_action(), desc = "Find Files" } },
       },
       {
-        name = "harpoon.nvim",
+        name = "harpoon.nvim", -- plugin added by the user
         _ = { module = "plugins.editor" },
         keys = { { "<leader>f", dummy_action(), desc = "Harpoon on leader f" } },
       },
     }
   end
-  it("can be changed accross all plugins defined in LazyVim", function()
+  it("can be changed across all plugins defined in LazyVim", function()
     local opts = { to_change = { f = "F" } }
     local spec = get_spec()
 

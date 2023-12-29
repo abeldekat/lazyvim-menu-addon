@@ -22,11 +22,11 @@ function M.setup(remap_cb, to_change)
       local resolve_decorated = remap_cb(resolve, to_change)
 
       ---@diagnostic disable-next-line: duplicate-set-field
-      LazyKeys.resolve = function(spec)
+      LazyKeys.resolve = function(spec) -- inject when attaching
         return resolve_decorated(spec)
       end
       on_attach(_, buffer)
-      LazyKeys.resolve = resolve
+      LazyKeys.resolve = resolve -- restore when done
     end
   end)
 end

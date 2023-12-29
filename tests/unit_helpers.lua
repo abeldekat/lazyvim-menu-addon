@@ -12,65 +12,87 @@ end
 
 ---@param opts LazyMenuOptions
 ---@return LazyMenuPluginAdapter
-function M.fake_plugin_adapter(opts, spec)
+function M.plugin(opts, decorators)
   return {
     get_opts = function()
       return opts
     end,
     setup = function(remap_cb, to_change)
-      local add = remap_cb(function(_, plugin, _)
-        return plugin
-      end, to_change)
-      for _, plugin in ipairs(spec) do
-        add(_, plugin)
-      end
+      -- stylua: ignore
+      local add_decorated = remap_cb(function(_, plugin, _) return plugin end, to_change)
+      decorators["plugin"] = add_decorated
     end,
   }
 end
 
 ---@return LazyMenuWhichKeyAdapter
-function M.fake_which_key_adapter()
+function M.which_key(decorators)
   return {
     setup = function(remap_cb, to_change)
-      remap_cb(function() end, to_change)
+      local values_decorated = remap_cb(function() end, to_change)
+      decorators["which_key"] = values_decorated
     end,
   }
 end
 
 ---@return LazyMenuLspAdapter
-function M.fake_lsp_adapter()
+function M.lsp(decorators)
   return {
     leaders = function()
       return {}
     end,
     setup = function(remap_cb, to_change)
-      remap_cb(function() end, to_change)
+      local resolve_decorated = remap_cb(function() end, to_change)
+      decorators["lsp"] = resolve_decorated
     end,
   }
 end
 
 ---@return LazyMenuKeymapsAdapter
-function M.fake_keymaps_adapter()
+function M.keymaps(decorators)
   return {
     leaders = function()
       return {}
     end,
     setup = function(remap_cb, to_change)
-      remap_cb(function() end, to_change)
+      local safe_keymap_set_decorated = remap_cb(function() end, to_change)
+      decorators["keymaps"] = safe_keymap_set_decorated
     end,
   }
 end
 
--- run lazymenu. See lazymenu.hook
 -- simulate lazy.nvim parsing the spec
+local function run(decorators, spec)
+  for _, plugin in ipairs(spec) do
+    decorators.plugin(_, plugin) -- lazy.nvim: parsing the spec
+  end
+  -- for _, plugin in ipairs(spec) do
+  --   -- decorators.which_key() -- lazy.nvim: loading plugins
+  -- end
+  -- for _, plugin in ipairs(spec) do
+  --   -- decorators.lsp() -- LazyVim: attaching lsp
+  -- end
+  -- for _, plugin in ipairs(spec) do
+  --   -- decorators.keymaps() -- LazyVim: Requiring lazyvim.config.keymaps on VeryLazy
+  -- end
+end
+
+-- activate lazymenu. See lazymenu.hook
 ---@param opts LazyMenuOptions
 function M.activate(opts, spec)
-  local plugin = M.fake_plugin_adapter(opts, spec)
-  local which_key = M.fake_which_key_adapter()
-  local lsp = M.fake_lsp_adapter()
-  local keymappings = M.fake_keymaps_adapter()
+  -- contains decorated functions, defined in the adapters
+  local decorators = {}
+  ---@type LazyMenuAdapters
+  local fake_adapters = {
+    plugin = M.plugin(opts, decorators),
+    which_key = M.which_key(decorators),
+    lsp = M.lsp(decorators),
+    keymaps = M.keymaps(decorators),
+  }
 
-  return require("lazymenu").on_hook(plugin, which_key, lsp, keymappings)
+  local dummy_spec = require("lazymenu").on_hook(fake_adapters)
+  run(decorators, spec) -- all hooks are ready: run
+  return dummy_spec
 end
 
 return M
