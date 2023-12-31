@@ -17,8 +17,6 @@ Work in progress...
 
 ## TODO
 
-Gitsigns also creates key-mappings on attach
-
 ## NOTES
 
 Example: Rename leader c to leader C:
