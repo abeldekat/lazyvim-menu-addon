@@ -1,11 +1,11 @@
 ---@class LazyMenuPluginAdapter
 local M = {}
 
----@return LazyMenuOptions
+---@return LazyMenuConfig
 function M.get_opts()
   local lazymenu_plugin = require("lazy.core.config").spec.plugins["lazymenu.nvim"]
 
-  ---@type LazyMenuOptions | fun(LazyPlugin, opts:table):LazyMenuOptions
+  ---@type LazyMenuConfig | fun(LazyPlugin, opts:table):LazyMenuConfig
   local opts = lazymenu_plugin.opts or {}
   if type(opts) == "function" then
     return opts(lazymenu_plugin, {})
@@ -13,12 +13,11 @@ function M.get_opts()
   return opts
 end
 
----@param remap_cb fun(add_cb:fun(), to_change:table<string,string>)
----@param to_change table<string,string>
-function M.setup(remap_cb, to_change)
+---@param remap_cb fun(add_cb:fun())
+function M.inject(remap_cb)
   local Spec = require("lazy.core.plugin").Spec
   local add = Spec.add
-  local add_decorated = remap_cb(add, to_change)
+  local add_decorated = remap_cb(add)
 
   ---@diagnostic disable-next-line: duplicate-set-field
   Spec.add = function(_, plugin, results)

@@ -15,15 +15,13 @@ Making sure lazymenu works -> see unit test specs
 ---@type LazyMenuAdapters
 local adapters = {
   plugin = require("lazymenu.adapters.plugin"),
-  which_key = require("lazymenu.adapters.which_key"),
   lsp = require("lazymenu.adapters.lsp"),
-  keymaps = require("lazymenu.adapters.keymaps"),
+  safe_keymap_set = require("lazymenu.adapters.safe_keymap_set"),
 }
 
 ---@type LazyMenuDomain
 local domain = {
   plugin = require("lazymenu.domain.plugin"),
-  which_key = require("lazymenu.domain.which_key"),
   lsp = require("lazymenu.domain.lsp"),
   keymaps = require("lazymenu.domain.keymaps"),
 }

@@ -1,14 +1,13 @@
 Utils = require("lazymenu.adapters.utils")
 
----@class LazyMenuKeymapsAdapter
+---@class LazyMenuSafeKeymapSetAdapter
 local M = {}
 
----@param remap_cb fun(safe_keymap_set_cb:fun(), to_change:table<string,string>)
----@param to_change table<string,string>
-function M.setup(remap_cb, to_change)
+---@param remap_cb fun(safe_keymap_set_cb:fun())
+function M.inject(remap_cb)
   Utils.on_load("LazyVim", function()
     local Util = require("lazyvim.util")
-    local safe_keymap_set_decorated = remap_cb(Util.safe_keymap_set, to_change)
+    local safe_keymap_set_decorated = remap_cb(Util.safe_keymap_set)
 
     ---@diagnostic disable-next-line: duplicate-set-field
     Util.safe_keymap_set = function(mode, lhs, rhs, opts)
