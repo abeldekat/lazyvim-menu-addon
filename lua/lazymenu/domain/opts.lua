@@ -1,4 +1,4 @@
-local Config = require("lazymenu.config")
+local Utils = require("lazymenu.domain.utils")
 local M = {}
 
 -- Property is a function executing vim.keymap.set
@@ -13,17 +13,11 @@ local function function_strategy(property)
     local set_org = vim.keymap.set
 
     ---@diagnostic disable-next-line: duplicate-set-field
-    vim.keymap.set = function(mode, l, r, opts)
-      for key_to_change, into in pairs(Config.options.leaders_to_change) do
-        if l:find(key_to_change, 1, true) then
-          l = l:gsub(key_to_change, into)
-          break
-        end
-      end
-      set_org(mode, l, r, opts)
+    vim.keymap.set = function(mode, l, r, opts) -- attach
+      set_org(mode, Utils.change_when_matched(l), r, opts)
     end
     property_org(...)
-    vim.keymap.set = set_org
+    vim.keymap.set = set_org -- release
   end
 
   return property
@@ -38,14 +32,7 @@ local function table_strategy(property)
 
   local result = {}
   for key, value in pairs(property) do
-    local new_key = key
-    for key_to_change, into in pairs(Config.options.leaders_to_change) do
-      if key:find(key_to_change, 1, true) then
-        new_key = key:gsub(key_to_change, into)
-        break
-      end
-    end
-    result[new_key] = value
+    result[Utils.change_when_matched(key)] = value
   end
   return result
 end

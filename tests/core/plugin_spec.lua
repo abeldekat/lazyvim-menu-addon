@@ -42,6 +42,7 @@ describe("menu items from which-key.nvim", function()
           defaults = {
             ["<leader>s"] = { name = "+search" },
             ["<leader>sn"] = { name = "+noice" },
+            ["<leader>in"] = { name = "+justforthetest" },
           },
         },
       },
@@ -64,12 +65,12 @@ describe("menu items from which-key.nvim", function()
     }
   end
   it("will be changed when defined in LazyVim", function()
-    local function assert_plugin_opts(plugin, leader_one, leader_two)
-      local plugin_result =
-        vim.tbl_keys(type(plugin.opts) == "function" and plugin.opts().defaults or plugin.opts.defaults)
-      assert(#plugin_result == 2)
-      assert(vim.tbl_contains(plugin_result, leader_one))
-      assert(vim.tbl_contains(plugin_result, leader_two))
+    local function assert_plugin_opts(plugin, leaders)
+      local opts_result = type(plugin.opts) == "function" and plugin.opts().defaults or plugin.opts.defaults
+      local keys = vim.tbl_keys(opts_result)
+      for _, leader in ipairs(leaders) do
+        assert(vim.tbl_contains(keys, leader))
+      end
     end
     local opts = { leaders_to_change = { s = "S" } }
     local spec = get_spec()
@@ -80,8 +81,8 @@ describe("menu items from which-key.nvim", function()
     assert.same({ "<leader>Sa", "<leader>sh" }, h.lazy_keys_result(spec))
 
     -- Changed which-key's opts, but not the fake telescope opts
-    assert_plugin_opts(spec[1], "<leader>S", "<leader>Sn")
-    assert_plugin_opts(spec[2], "<leader>s", "<leader>sn")
+    assert_plugin_opts(spec[1], { "<leader>S", "<leader>Sn", "<leader>in" })
+    assert_plugin_opts(spec[2], { "<leader>s", "<leader>sn" })
   end)
 end)
 

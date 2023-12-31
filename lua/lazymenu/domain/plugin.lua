@@ -21,11 +21,7 @@ function M.remap(add_cb)
 
     if fragment_has_keys then
       plugin.keys = vim.tbl_map(function(lazy_mapping)
-        for key, value in pairs(Config.options.leaders_to_change) do
-          if lazy_mapping[1]:find(key, 1, true) then
-            lazy_mapping[1] = lazy_mapping[1]:gsub(key, value)
-          end
-        end
+        lazy_mapping[1] = Utils.change_when_matched(lazy_mapping[1])
         return lazy_mapping
       end, plugin.keys)
     end

@@ -1,4 +1,4 @@
-local Config = require("lazymenu.config")
+local Utils = require("lazymenu.domain.utils")
 ---@class LazyMenuKeymapsDomain
 local M = {}
 
@@ -7,12 +7,7 @@ local M = {}
 function M.remap(adapter_cb)
   -- See lazyvim.util.init.safe_keymap_set
   return function(mode, lhs, rhs, opts)
-    for key, value in pairs(Config.options.leaders_to_change) do
-      if lhs:find(key, 1, true) then
-        lhs = lhs:gsub(key, value)
-      end
-    end
-    adapter_cb(mode, lhs, rhs, opts)
+    adapter_cb(mode, Utils.change_when_matched(lhs), rhs, opts)
   end
 end
 

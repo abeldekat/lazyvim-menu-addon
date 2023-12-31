@@ -1,4 +1,4 @@
-local Config = require("lazymenu.config")
+local Utils = require("lazymenu.domain.utils")
 ---@class LazyMenuLspDomain
 local M = {}
 
@@ -13,11 +13,7 @@ function M.remap(adapter_cb)
   return function(spec)
     if spec and type(spec) == "table" then
       spec = vim.tbl_map(function(spec_item)
-        for key, value in pairs(Config.options.leaders_to_change) do
-          if spec_item[1]:find(key, 1, true) then
-            spec_item[1] = spec_item[1]:gsub(key, value)
-          end
-        end
+        spec_item[1] = Utils.change_when_matched(spec_item[1])
         return spec_item
       end, spec)
     end
