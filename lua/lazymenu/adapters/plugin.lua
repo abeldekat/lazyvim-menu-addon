@@ -13,25 +13,15 @@ function M.get_opts()
   return opts
 end
 
----@param remap_cb fun(add_cb:fun())
-function M.inject(remap_cb)
+---@param change_cb fun(add_cb:fun())
+function M.inject(change_cb)
   local Spec = require("lazy.core.plugin").Spec
-  local add = Spec.add
-  local add_decorated = remap_cb(add)
+  local add_decorated = change_cb(Spec.add)
 
   ---@diagnostic disable-next-line: duplicate-set-field
   Spec.add = function(_, plugin, results)
     return add_decorated(_, plugin, results)
   end
-
-  -- detach when done
-  vim.api.nvim_create_autocmd("User", {
-    pattern = "LazyDone",
-    once = true,
-    callback = function()
-      Spec.add = add
-    end,
-  })
 end
 
 return M

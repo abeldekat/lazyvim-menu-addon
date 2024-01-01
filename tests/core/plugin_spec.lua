@@ -31,7 +31,6 @@ describe("a leader key", function()
   end)
 end)
 
--- NOTE: lazy.nvim: this also works with multiple which-key fragments
 describe("menu items from which-key.nvim", function()
   local function get_spec()
     return {
@@ -86,7 +85,6 @@ describe("menu items from which-key.nvim", function()
   end)
 end)
 
--- NOTE: lazy.nvim: this also works with multiple which-key fragments
 describe("menu items from gitsigns.nvim", function()
   local function get_spec()
     local function map(mode, l, r, desc)
@@ -129,7 +127,7 @@ describe("menu items from gitsigns.nvim", function()
     local spec = get_spec()
 
     h.activate(opts, spec)
-    spec[1].opts().on_attach()
+    spec[1].opts.on_attach()
     spec[2].opts.on_attach()
 
     for _, key in ipairs({ "]h", "\\GhS", "\\GhR", "\\ihS", "\\ihR" }) do

@@ -7,7 +7,7 @@ local M = {}
 -- Remaps keys in LazyVim's lsp plugins definitions after the plugin has been added
 -- Is activated when LazyVim is loaded
 ---@param adapter_cb fun(spec?:(string|LazyKeysSpec)[])
-function M.remap(adapter_cb)
+function M.change(adapter_cb)
   -- See lazy.core.handler.keys.resolve
   ---@param spec? (string|LazyKeysSpec)[]
   return function(spec)

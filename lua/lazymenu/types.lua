@@ -1,9 +1,11 @@
 ---@class LazyMenuAdapters
 ---@field plugin LazyMenuPluginAdapter
+---@field values LazyMenuValuesAdapter
 ---@field lsp LazyMenuLspAdapter
 ---@field safe_keymap_set LazyMenuSafeKeymapSetAdapter
 
 ---@class LazyMenuDomain
 ---@field plugin LazyMenuPluginDomain
+---@field values LazyMenuValuesDomain
 ---@field lsp LazyMenuLspDomain
 ---@field keymaps LazyMenuKeymapsDomain
