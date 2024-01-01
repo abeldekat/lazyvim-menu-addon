@@ -6,7 +6,7 @@ describe("keymaps in lazyvim.config.keymaps", function()
     { "<leader>gg", dummy_action, { desc = "LazyVim defined" } },
     { "<leader>gG", dummy_action, { desc = "LazyVim defined" } },
   }
-  it("are also changed when using safe_keymap_set", function()
+  it("are changed when using safe_keymap_set", function()
     local opts = { leaders_to_change = { g = "G" } }
 
     vim.keymap.set({ "n" }, "<leader>gN", dummy_action, { desc = "User defined" })

@@ -3,5 +3,6 @@
 # nvim --headless -u tests/init.lua -c "PlenaryBustedDirectory tests/core/e2e_spec.lua {minimal_init = 'tests//init.lua', sequential = true}"
 nvim --headless -u tests/init.lua -c "PlenaryBustedDirectory tests/core/plugin_spec.lua {minimal_init = 'tests//init.lua', sequential = true}"
 nvim --headless -u tests/init.lua -c "PlenaryBustedDirectory tests/core/values_spec.lua {minimal_init = 'tests//init.lua', sequential = true}"
+nvim --headless -u tests/init.lua -c "PlenaryBustedDirectory tests/core/lsp_spec.lua {minimal_init = 'tests//init.lua', sequential = true}"
 nvim --headless -u tests/init.lua -c "PlenaryBustedDirectory tests/core/keymaps_spec.lua {minimal_init = 'tests//init.lua', sequential = true}"
 # nvim --headless -u tests/init.lua -c "PlenaryBustedDirectory tests {minimal_init = 'tests//init.lua', sequential = true}"

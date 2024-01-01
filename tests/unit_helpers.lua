@@ -47,7 +47,12 @@ end
 function M.lsp(decorators)
   return {
     inject = function(change_cb)
-      decorators["lsp"] = change_cb(function() end)
+      decorators["lsp"] = change_cb(function(spec) ---param spec? (string|LazyKeysSpec)[]
+        -- for testing: simulate the result by setting the keymap
+        for _, item in ipairs(spec) do
+          vim.keymap.set({ "n" }, item[1], item[2], { desc = item.desc })
+        end
+      end)
     end,
   }
 end
@@ -65,21 +70,24 @@ end
 
 -- simulate activation by lazy.nvim
 local function run(decorators, test_input)
-  if test_input.spec then
+  if test_input.spec then -- plugin and values
     for _, plugin in ipairs(test_input.spec) do
-      decorators.plugin(_, plugin)
+      decorators.plugin(_, plugin) -- plugin
       if plugin.opts then
-        plugin.opts = decorators.values(plugin, "opts", false)
+        plugin.opts = decorators.values(plugin, "opts", false) -- values
       end
     end
   end
 
-  if test_input.keymaps then
+  if test_input.keyspec then -- lsp
+    decorators.lsp(test_input.keyspec)
+  end
+  --
+  if test_input.keymaps then -- keymaps
     for _, keymap in ipairs(test_input.keymaps) do
       decorators.keymaps({ "n" }, keymap[1], keymap[2], keymap[3])
     end
   end
-  -- lsp
 end
 
 -- activate lazymenu. See lazymenu.hook
