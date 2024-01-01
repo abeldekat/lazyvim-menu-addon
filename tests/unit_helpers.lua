@@ -1,5 +1,14 @@
 local M = {}
 
+function M.has_key(key)
+  for _, item in ipairs(vim.api.nvim_get_keymap("n")) do
+    if key == item.lhs then
+      return true
+    end
+  end
+  return false
+end
+
 function M.lazy_keys_result(spec)
   local result = {}
   for _, plugin in ipairs(spec) do
@@ -47,26 +56,35 @@ end
 function M.keymaps(decorators)
   return {
     inject = function(change_cb)
-      decorators["keymaps"] = change_cb(function() end)
+      decorators["keymaps"] = change_cb(function(mode, lhs, rhs, opts)
+        vim.keymap.set(mode, lhs, rhs, opts)
+      end)
     end,
   }
 end
 
 -- simulate activation by lazy.nvim
-local function run(decorators, spec)
-  for _, plugin in ipairs(spec) do
-    decorators.plugin(_, plugin)
-    if plugin.opts then
-      plugin.opts = decorators.values(plugin, "opts", false)
+local function run(decorators, test_input)
+  if test_input.spec then
+    for _, plugin in ipairs(test_input.spec) do
+      decorators.plugin(_, plugin)
+      if plugin.opts then
+        plugin.opts = decorators.values(plugin, "opts", false)
+      end
     end
-    -- lsp
-    -- keymaps
   end
+
+  if test_input.keymaps then
+    for _, keymap in ipairs(test_input.keymaps) do
+      decorators.keymaps({ "n" }, keymap[1], keymap[2], keymap[3])
+    end
+  end
+  -- lsp
 end
 
 -- activate lazymenu. See lazymenu.hook
 ---@param opts LazyMenuConfig
-function M.activate(opts, spec)
+function M.activate(opts, test_input)
   -- contains decorated functions created in fake_adapters
   local decorators = {}
 
@@ -87,7 +105,7 @@ function M.activate(opts, spec)
   }
 
   local dummy_spec = require("lazymenu").on_hook(fake_adapters, domain)
-  run(decorators, spec) -- all hooks are ready: run
+  run(decorators, test_input) -- all hooks are ready: run
 
   return dummy_spec
 end
