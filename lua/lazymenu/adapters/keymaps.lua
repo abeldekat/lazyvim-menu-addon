@@ -1,6 +1,6 @@
 Utils = require("lazymenu.adapters.utils")
 
----@class LazyMenuSafeKeymapSetAdapter
+---@class LazyMenuKeymapsAdapter
 local M = {}
 
 ---@param change_cb fun(safe_keymap_set_cb:fun())

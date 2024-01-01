@@ -1,4 +1,5 @@
--- TODO: rename safe keymaps set adapter
+-- TODO: which-key: Distinguish between lazyvim and user vim opts
+-- TODO: which-key: Document the other approach: Decorate plugin.opts, needs merging...
 
 local Config = require("lazymenu.config")
 local M = {}
@@ -25,11 +26,11 @@ function M.on_hook(adapters, domain)
     return {} -- Return early with a dummy spec
   end
 
-  adapters.plugin.inject(domain.plugin.change) -- plugin.keys
-  adapters.values.inject(domain.values.change) -- plugin.opts
-  adapters.safe_keymap_set.inject(domain.keymaps.change) -- lazyvim.config.keymaps.lua
+  adapters.plugin.inject(domain.plugin.change) -- plugin.keys: Parsing the spec
+  adapters.values.inject(domain.values.change) -- plugin.opts: Loading the plugin
+  adapters.keymaps.inject(domain.keymaps.change) -- lazyvim.config.keymaps.lua on VeryLazy
   if has_leader_for_lsp() then
-    adapters.lsp.inject(domain.lsp.change) -- lazyvim.plugins.lsp.keymaps
+    adapters.lsp.inject(domain.lsp.change) -- lazyvim.plugins.lsp.keymaps: Attaching to a buffer
   end
 
   return {} -- All code is injected, return a dummy spec

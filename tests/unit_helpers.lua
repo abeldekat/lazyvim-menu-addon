@@ -43,7 +43,7 @@ function M.lsp(decorators)
   }
 end
 
----@return LazyMenuSafeKeymapSetAdapter
+---@return LazyMenuKeymapsAdapter
 function M.keymaps(decorators)
   return {
     inject = function(change_cb)
@@ -52,27 +52,22 @@ function M.keymaps(decorators)
   }
 end
 
--- simulate lazy.nvim parsing the spec
+-- simulate activation by lazy.nvim
 local function run(decorators, spec)
   for _, plugin in ipairs(spec) do
-    decorators.plugin(_, plugin) -- lazy.nvim: parsing the spec
+    decorators.plugin(_, plugin)
     if plugin.opts then
-      plugin.opts = decorators.values(plugin, "opts", false) -- lazy.nvim: parsing the spec
+      plugin.opts = decorators.values(plugin, "opts", false)
     end
+    -- lsp
+    -- keymaps
   end
-
-  -- for _, plugin in ipairs(spec) do
-  --   -- decorators.lsp() -- LazyVim: attaching lsp
-  -- end
-  -- for _, plugin in ipairs(spec) do
-  --   -- decorators.keymaps() -- LazyVim: Requiring lazyvim.config.keymaps on VeryLazy
-  -- end
 end
 
 -- activate lazymenu. See lazymenu.hook
 ---@param opts LazyMenuConfig
 function M.activate(opts, spec)
-  -- contains the decorated functions created in the adapters
+  -- contains decorated functions created in fake_adapters
   local decorators = {}
 
   ---@type LazyMenuAdapters
@@ -80,7 +75,7 @@ function M.activate(opts, spec)
     plugin = M.plugin(opts, decorators),
     values = M.values(decorators),
     lsp = M.lsp(decorators),
-    safe_keymap_set = M.keymaps(decorators),
+    keymaps = M.keymaps(decorators),
   }
 
   ---@type LazyMenuDomain

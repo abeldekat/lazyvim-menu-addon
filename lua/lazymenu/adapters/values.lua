@@ -2,7 +2,7 @@
 local M = {}
 
 ---@param change_cb fun(add_cb:fun())
-function M.inject(change_cb) -- on load: change keys defined inside opts
+function M.inject(change_cb)
   local Plugin = require("lazy.core.plugin")
   local values_decorated = change_cb(Plugin.values)
 
