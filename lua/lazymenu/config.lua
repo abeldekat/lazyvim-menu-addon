@@ -21,18 +21,16 @@ local defaults = {
     -- x = "X", -- diagnostics/quickfix
   },
 
-  -- Only hook into lsp's keymap attach when leaders_to_change has the leaders for lsp:
-  lsp = { "<leader>c" }, -- on attach
+  -- Hook into lsp keymaps when leaders_to_change contains leaders used in lspconfig:
+  leaders_in_lspconfig = { "<leader>c" }, -- on attach
 
-  -- Only hook into plugin.opts for certain plugins:
+  -- Hook into plugin.opts for certain plugins:
   keys_in_opts = {
     ["which-key.nvim"] = {
       property = "defaults", -- contains a table with keys
-      type = "table",
     },
     ["gitsigns.nvim"] = {
       property = "on_attach", -- contains a function with keys for leader g
-      type = "function",
     },
   },
 }

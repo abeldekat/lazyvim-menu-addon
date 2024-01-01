@@ -28,7 +28,7 @@ function M.remap(add_cb)
 
     for name, config in pairs(Config.options.keys_in_opts) do
       if name == plugin.name and plugin.opts then
-        plugin.opts = Opts.remap(plugin, config.property, config.type)
+        plugin.opts = Opts.remap(plugin, config.property)
       end
     end
 

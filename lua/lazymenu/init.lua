@@ -5,7 +5,7 @@ local M = {}
 
 -- The user wants to remap a leader with lsp mappings
 local function has_leader_for_lsp()
-  for _, leader in ipairs(Config.options.lsp) do
+  for _, leader in ipairs(Config.options.leaders_in_lspconfig) do
     if Config.options.leaders_to_change[leader] then
       return true
     end
