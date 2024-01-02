@@ -82,7 +82,7 @@ local function run(decorators, test_input)
   if test_input.keyspec then -- lsp
     decorators.lsp(test_input.keyspec)
   end
-  --
+
   if test_input.keymaps then -- keymaps
     for _, keymap in ipairs(test_input.keymaps) do
       decorators.keymaps({ "n" }, keymap[1], keymap[2], keymap[3])
@@ -93,7 +93,7 @@ end
 -- activate lazymenu. See lazymenu.hook
 ---@param opts LazyMenuConfig
 function M.activate(opts, test_input)
-  -- contains decorated functions created in fake_adapters
+  -- run: contains decorated functions created in each fake_adapter.inject
   local decorators = {}
 
   ---@type LazyMenuAdapters
@@ -113,7 +113,7 @@ function M.activate(opts, test_input)
   }
 
   local dummy_spec = require("lazymenu").on_hook(fake_adapters, domain)
-  run(decorators, test_input) -- all hooks are ready: run
+  run(decorators, test_input) -- all code is injected: run
 
   return dummy_spec
 end

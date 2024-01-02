@@ -1,5 +1,8 @@
 -- TODO: which-key: Distinguish between lazyvim and user vim opts
 -- TODO: which-key: Document the other approach: Decorate plugin.opts, needs merging...
+-- TODO: Implement "remove"
+-- TODO: Document limitations for leader c(lsp) and leader g(gitsigns)
+-- TODO: Rename the project to lazyvim-menu-addon
 
 local Config = require("lazymenu.config")
 local M = {}
