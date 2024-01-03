@@ -41,6 +41,15 @@ local function change_in(prop_as_table)
 end
 
 -- Remap leader keys in plugin.opts
+-- Supports two approaches:
+--   1. The keys are property values in the opts table: --> Change the keys. Example: which-key.nvim
+--   2. The keys are in a rhs function in the opts table: --> Decorate the function. Example: gitsigns.nvim
+--
+-- This could also be achieved by decorating each plugin.opts with a function when applicable
+-- However, using that approach, lazymenu.nvim would be responsible for the merging algorithm
+-- The merging algorithm is more complex than just vim.tbl_deep_extend
+-- See lazy.core.plugin._values and lazy.core.util.merge
+--
 ---@param values_cb fun(plugin:LazyPlugin, prop:string, is_list?:boolean)
 ---@return fun(plugin:LazyPlugin, prop:string, is_list?:boolean):table
 function M.change(values_cb)
@@ -54,14 +63,15 @@ function M.change(values_cb)
       return result
     end
 
+    local opts = result -- the final opts, lazy.nvim has performed the merging
     for name, config in pairs(Config.options.keys_in_opts) do
       if name == plugin.name then
-        local target = result[config.property]
-        result[config.property] = type(target) == "function" and decorate_function_in(target) or change_in(target)
+        local target = opts[config.property]
+        opts[config.property] = type(target) == "function" and decorate_function_in(target) or change_in(target)
       end
     end
 
-    return result
+    return opts
   end
 end
 
