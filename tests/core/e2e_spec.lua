@@ -22,10 +22,7 @@ describe("lazymenu.nvim", function()
     end
   end)
   it("integrates with LazyVim", function()
-    local function no_event()
-      return {}
-    end
-    local leaders_to_change = { g = "G", s = "S" }
+    local leaders_to_change = { c = "C", g = "G", s = "S" }
     local Lazy = require("lazy")
 
     Lazy.setup({ -- test using 12 plugins, including lazy and LazyVim
@@ -58,18 +55,20 @@ describe("lazymenu.nvim", function()
         "LazyVim/LazyVim",
         import = "lazyvim.plugins",
         opts = function(_, _) -- WORKAROUNDS...
-          -- keymaps adapter: Trigger keymaps
+          -- keymaps adapter: Trigger keymaps in keymaps.lua
           require("lazyvim.config.keymaps") -- on very lazy, UIEnter is too late
 
-          -- values adapter: trigger gitsigns. The test does not invoke gitsigns.opts
+          -- values adapter: Trigger gitsigns. The test does not invoke gitsigns.opts
           local gitsigns = require("lazy.core.config").spec.plugins["gitsigns.nvim"]
           local gitsigns_opts = require("lazy.core.plugin").values(gitsigns, "opts", false)
           gitsigns_opts.on_attach() -- manually invoke on_attach
+
+          -- lsp adapter: Trigger the keymaps for the lps. Buffer 0
+          require("lazyvim.plugins.lsp.keymaps").on_attach(_, 0)
         end,
       },
       {
         "lewis6991/gitsigns.nvim", -- WORKAROUNDS...
-        event = no_event,
         opts = {
           -- values adapter: In LazyVim, gitsigns on_attach mappings are buffer local...
           on_attach = function(_) -- override on_attach
@@ -80,7 +79,8 @@ describe("lazymenu.nvim", function()
     }, { install_missing = true })
 
     assert(h.has_key(" So")) -- search options --> plugins adapter
-    assert(h.has_key(" Gg")) -- keymaps.lua --> keymaps adapter
     assert(h.has_key(" GhS")) -- gitsigns --> values adapter
+    assert(h.has_key(" Gg")) -- keymaps.lua --> keymaps adapter
+    assert(h.has_key(" Cl", 0)) -- lsp --> lsp adapter
   end)
 end)

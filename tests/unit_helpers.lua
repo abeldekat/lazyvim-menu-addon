@@ -1,7 +1,10 @@
 local M = {}
 
-function M.has_key(key)
-  for _, item in ipairs(vim.api.nvim_get_keymap("n")) do
+---@param key string
+---@param buffer? integer
+function M.has_key(key, buffer)
+  local keymaps = buffer and vim.api.nvim_buf_get_keymap(0, "n") or vim.api.nvim_get_keymap("n")
+  for _, item in ipairs(keymaps) do
     if key == item.lhs then
       return true
     end
@@ -9,6 +12,9 @@ function M.has_key(key)
   return false
 end
 
+--- Returns all "lhs" from each plugin.keys
+--- In the unit tests, plugin.keys should be of type LazyKeysSpec[]
+---@return string[]
 function M.lazy_keys_result(spec)
   local result = {}
   for _, plugin in ipairs(spec) do
@@ -68,9 +74,9 @@ function M.keymaps(decorators)
   }
 end
 
--- simulate activation by lazy.nvim
+-- Simulate activation by lazy.nvim
 local function run(decorators, test_input)
-  if test_input.spec then -- plugin and values
+  if test_input.spec then -- plugin and values adapter
     for _, plugin in ipairs(test_input.spec) do
       decorators.plugin(_, plugin) -- plugin
       if plugin.opts then
@@ -79,11 +85,11 @@ local function run(decorators, test_input)
     end
   end
 
-  if test_input.keyspec then -- lsp
+  if test_input.keyspec then -- lsp adapter
     decorators.lsp(test_input.keyspec)
   end
 
-  if test_input.keymaps then -- keymaps
+  if test_input.keymaps then -- keymaps adapter
     for _, keymap in ipairs(test_input.keymaps) do
       decorators.keymaps({ "n" }, keymap[1], keymap[2], keymap[3])
     end
