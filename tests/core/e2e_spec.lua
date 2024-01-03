@@ -55,13 +55,13 @@ describe("lazymenu.nvim", function()
         "LazyVim/LazyVim",
         import = "lazyvim.plugins",
         opts = function(_, _) -- WORKAROUNDS...
-          -- keymaps adapter: Trigger keymaps in keymaps.lua
-          require("lazyvim.config.keymaps") -- on very lazy, UIEnter is too late
-
-          -- values adapter: Trigger gitsigns. The test does not invoke gitsigns.opts
+          -- values adapter: Trigger gitsigns. The test does not invoke gitsigns plugin.opts
           local gitsigns = require("lazy.core.config").spec.plugins["gitsigns.nvim"]
           local gitsigns_opts = require("lazy.core.plugin").values(gitsigns, "opts", false)
-          gitsigns_opts.on_attach() -- manually invoke on_attach
+          gitsigns_opts.on_attach(0) -- manually invoke on_attach
+
+          -- keymaps adapter: Trigger keymaps in keymaps.lua
+          require("lazyvim.config.keymaps") -- on very lazy, UIEnter is too late
 
           -- lsp adapter: Trigger the keymaps for the lps. Buffer 0
           require("lazyvim.plugins.lsp.keymaps").on_attach(_, 0)
@@ -70,16 +70,16 @@ describe("lazymenu.nvim", function()
       {
         "lewis6991/gitsigns.nvim", -- WORKAROUNDS...
         opts = {
-          -- values adapter: In LazyVim, gitsigns on_attach mappings are buffer local...
-          on_attach = function(_) -- override on_attach
-            vim.keymap.set({ "n" }, "<leader>ghS", function() end, { desc = "Test Stage Buffer" })
+          -- values adapter: During test, the gitsigns spec in LazyVim contains package.loaded.gitsigns == nil
+          on_attach = function(buffer) -- override on_attach
+            vim.keymap.set({ "n" }, "<leader>ghS", function() end, { buffer = buffer, desc = "Test Stage Buffer" })
           end,
         },
       },
     }, { install_missing = true })
 
     assert(h.has_key(" So")) -- search options --> plugins adapter
-    assert(h.has_key(" GhS")) -- gitsigns --> values adapter
+    assert(h.has_key(" GhS", 0)) -- gitsigns --> values adapter
     assert(h.has_key(" Gg")) -- keymaps.lua --> keymaps adapter
     assert(h.has_key(" Cl", 0)) -- lsp --> lsp adapter
   end)
