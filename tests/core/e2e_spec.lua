@@ -28,12 +28,17 @@ describe("lazymenu.nvim", function()
     local leaders_to_change = { g = "G", s = "S" }
     local Lazy = require("lazy")
 
-    Lazy.setup({
+    Lazy.setup({ -- test using 12 plugins, including lazy and LazyVim
       {
         "abeldekat/lazyflex.nvim", -- restrict the plugins to use...
         version = "*",
         import = "lazyflex.hook",
-        opts = { lazyvim = { presets = { "coding", "editor" } }, kw = { "plen", "tokyo" } },
+        opts = {
+          enable_match = false,
+          -- only keep init and colorsscheme
+          lazyvim = { presets = { "coding", "editor", "formatting", "linting", "lsp", "treesitter", "ui" } },
+          override_kw = { "gitsi", "which", "telesc" },
+        },
       },
       {
         "abeldekat/lazymenu.nvim",
