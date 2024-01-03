@@ -2,8 +2,20 @@ local h = require("tests.unit_helpers")
 local dummy_action = function() end
 
 describe("menu items from which-key.nvim", function()
-  local function get_spec()
-    return {
+  local menu_opts = { leaders_to_change = { s = "S" } }
+
+  local function assert_plugin_opts(plugin, leaders)
+    local keys = vim.tbl_keys(plugin.opts.defaults)
+    for _, leader in ipairs(leaders) do
+      assert(vim.tbl_contains(keys, leader))
+    end
+  end
+  local function assert_description(plugin, key, description)
+    -- TODO: Implement
+  end
+
+  local function get_spec(extra_spec)
+    local result = {
       {
         name = "which-key.nvim",
         _ = { module = "lazyvim.plugins.editor" },
@@ -15,8 +27,16 @@ describe("menu items from which-key.nvim", function()
           },
         },
       },
+    }
+    for _, spec in ipairs(extra_spec) do
+      table.insert(result, spec)
+    end
+    return result
+  end
+  it("will be changed when defined in LazyVim", function()
+    local spec = get_spec({
       {
-        name = "telescope.nvim",
+        name = "telescope.nvim", -- telescope using opts like which-key
         _ = { module = "lazyvim.plugins.editor" },
         keys = { { "<leader>sa", dummy_action(), desc = "Auto Commands" } },
         opts = { -- just for testing:
@@ -31,20 +51,9 @@ describe("menu items from which-key.nvim", function()
         _ = { module = "plugins.editor" },
         keys = { { "<leader>sh", dummy_action(), desc = "Harpoon on leader sh" } },
       },
-    }
-  end
-  it("will be changed when defined in LazyVim", function()
-    local function assert_plugin_opts(plugin, leaders)
-      local opts_result = type(plugin.opts) == "function" and plugin.opts().defaults or plugin.opts.defaults
-      local keys = vim.tbl_keys(opts_result)
-      for _, leader in ipairs(leaders) do
-        assert(vim.tbl_contains(keys, leader))
-      end
-    end
-    local opts = { leaders_to_change = { s = "S" } }
-    local spec = get_spec()
+    })
 
-    h.activate(opts, { spec = spec })
+    h.activate(menu_opts, { spec = spec })
 
     -- Changed telescope key, but not the key for Harpoon:
     assert.same({ "<leader>Sa", "<leader>sh" }, h.lazy_keys_result(spec))
@@ -52,6 +61,38 @@ describe("menu items from which-key.nvim", function()
     -- Changed which-key's opts, but not the fake telescope opts
     assert_plugin_opts(spec[1], { "<leader>S", "<leader>Sn", "<leader>in" })
     assert_plugin_opts(spec[2], { "<leader>s", "<leader>sn" })
+  end)
+  it("are only changed when defined in LazyVim", function()
+    local spec = get_spec({
+      {
+        name = "harpoon.nvim", -- plugin added by the user
+        _ = { module = "plugins.editor" },
+        keys = { { "<leader>sh", dummy_action(), desc = "Harpoon on leader sh" } },
+      },
+      {
+        name = "which-key.nvim", -- menu item for harpoon  added by the user
+        _ = { module = "plugins.editor" },
+        opts = {
+          defaults = {
+            ["<leader>s"] = { name = "+harpoon" },
+          },
+        },
+      },
+    })
+
+    h.activate(menu_opts, { spec = spec })
+
+    -- Key for Harpoon:
+    assert.same({ "<leader>sh" }, h.lazy_keys_result(spec))
+
+    -- Changed which-key's opts
+    assert_plugin_opts(spec[1], { "<leader>S", "<leader>Sn", "<leader>in" })
+    -- assert_plugin_opts(spec[3], { "<leader>S" })
+    assert_plugin_opts(spec[3], { "<leader>s" }) -- now fails....
+
+    -- TODO: Assert correct description
+    --
+    assert_description(spec[3], "<leader>s", "+harpoon")
   end)
 end)
 
