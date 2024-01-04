@@ -79,8 +79,9 @@ describe("menu items in which-key.nvim", function()
   local menu_opts = { leaders_to_change = { s = "S" } }
 
   local function assert_plugin_opts(plugin, keys_expected)
+    local opts = type(plugin.opts) == "function" and plugin.opts(_, {}) or plugin.opts
     for _, key in ipairs(keys_expected) do
-      assert(plugin.opts.defaults[key])
+      assert(opts.defaults[key])
     end
   end
   local function get_spec(extra_spec)
@@ -91,10 +92,19 @@ describe("menu items in which-key.nvim", function()
         opts = {
           defaults = {
             ["<leader>s"] = { name = "+search" },
-            ["<leader>sn"] = { name = "+noice" },
             ["<leader>in"] = { name = "+justforthetest" },
           },
         },
+      },
+      {
+        name = "which-key.nvim",
+        _ = { module = "lazyvim.plugins.ui" },
+        opts = function(_, opts)
+          opts.defaults = {
+            ["<leader>sn"] = { name = "+noice" },
+          }
+          return opts
+        end,
       },
     }
     for _, spec in ipairs(extra_spec) do
@@ -102,6 +112,7 @@ describe("menu items in which-key.nvim", function()
     end
     return result
   end
+
   it("can be changed", function()
     local spec = get_spec({
       {
@@ -128,12 +139,15 @@ describe("menu items in which-key.nvim", function()
     assert.same({ "<leader>Sa", "<leader>sh" }, h.lazy_keys_result(spec))
 
     -- Changed which-key's opts, but not the fake telescope opts
-    assert_plugin_opts(spec[1], { "<leader>S", "<leader>Sn", "<leader>in" })
-    assert_plugin_opts(spec[2], { "<leader>s", "<leader>sn" })
+    assert_plugin_opts(spec[1], { "<leader>S", "<leader>in" })
+    assert_plugin_opts(spec[2], { "<leader>Sn" })
+    assert_plugin_opts(spec[3], { "<leader>s", "<leader>sn" })
   end)
+
   it("are changed only when defined in LazyVim", function()
     local function assert_description(plugin, key_expected, description_expected)
-      assert(plugin.opts.defaults[key_expected]["name"] == description_expected)
+      local opts = type(plugin.opts) == "function" and plugin.opts(_, {}) or plugin.opts
+      assert(opts.defaults[key_expected]["name"] == description_expected)
     end
     local spec = get_spec({
       {
@@ -158,10 +172,11 @@ describe("menu items in which-key.nvim", function()
     assert.same({ "<leader>sh" }, h.lazy_keys_result(spec))
 
     --  Which-key's opts:
-    assert_plugin_opts(spec[1], { "<leader>S", "<leader>Sn", "<leader>in" })
+    assert_plugin_opts(spec[1], { "<leader>S", "<leader>in" })
     assert_description(spec[1], "<leader>S", "+search")
-    assert_description(spec[1], "<leader>Sn", "+noice")
-    assert_plugin_opts(spec[2], { "<leader>s" })
-    assert_description(spec[2], "<leader>s", "+harpoon")
+    assert_plugin_opts(spec[2], { "<leader>Sn" })
+    assert_description(spec[2], "<leader>Sn", "+noice")
+    assert_plugin_opts(spec[3], { "<leader>s" })
+    assert_description(spec[3], "<leader>s", "+harpoon")
   end)
 end)

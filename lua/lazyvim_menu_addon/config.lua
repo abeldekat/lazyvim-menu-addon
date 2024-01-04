@@ -31,13 +31,9 @@ local defaults = {
   leaders_in_lspconfig = { "<leader>c" }, -- on attach
 
   -- Hook into plugin.opts for certain plugins:
-  keys_in_opts = {
-    ["which-key.nvim"] = {
-      property = "defaults", -- contains a table with keys
-    },
-    ["gitsigns.nvim"] = {
-      property = "on_attach", -- contains a function with keys for leader g
-    },
+  change_in_opts = {
+    ["which-key.nvim"] = "defaults", -- contains a table with keys and menu descriptions
+    ["gitsigns.nvim"] = "on_attach", -- contains a function defining keys for leader g
   },
 }
 
