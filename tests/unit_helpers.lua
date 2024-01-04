@@ -39,16 +39,6 @@ function M.plugin(opts, decorators)
   }
 end
 
----@return LazyMenuValuesAdapter
-function M.values(decorators)
-  -- stylua: ignore
-  return {
-    inject = function(change_cb)
-      decorators["values"] = change_cb(function(plugin,_, _) return plugin.opts end)
-    end,
-  }
-end
-
 ---@return LazyMenuLspAdapter
 function M.lsp(decorators)
   return {
@@ -76,12 +66,9 @@ end
 
 -- Simulate activation by lazy.nvim
 local function run(decorators, test_input)
-  if test_input.spec then -- plugin and values adapter
+  if test_input.spec then -- plugin adapter
     for _, plugin in ipairs(test_input.spec) do
       decorators.plugin(_, plugin) -- plugin
-      if plugin.opts then
-        plugin.opts = decorators.values(plugin, "opts", false) -- values
-      end
     end
   end
 
@@ -105,7 +92,6 @@ function M.activate(opts, test_input)
   ---@type LazyMenuAdapters
   local fake_adapters = {
     plugin = M.plugin(opts, decorators),
-    values = M.values(decorators),
     lsp = M.lsp(decorators),
     keymaps = M.keymaps(decorators),
   }
@@ -113,7 +99,6 @@ function M.activate(opts, test_input)
   ---@type LazyMenuDomain
   local domain = {
     plugin = require("lazymenu.domain.plugin"),
-    values = require("lazymenu.domain.values"),
     lsp = require("lazymenu.domain.lsp"),
     keymaps = require("lazymenu.domain.keymaps"),
   }

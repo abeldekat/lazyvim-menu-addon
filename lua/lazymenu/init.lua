@@ -1,6 +1,4 @@
--- TODO: which-key: Distinguish between lazyvim and user vim opts
--- TODO: Implement "remove"
--- TODO: Document limitations for leader c(lsp) and leader g(gitsigns)
+-- TODO: Document limitations for leader c(lsp) or consider decorating lspconfig.init
 -- TODO: Rename the project to lazyvim-menu-addon
 
 local Config = require("lazymenu.config")
@@ -28,8 +26,7 @@ function M.on_hook(adapters, domain)
     return {} -- Return early with a dummy spec
   end
 
-  adapters.plugin.inject(domain.plugin.change) -- plugin.keys: Parsing the spec
-  adapters.values.inject(domain.values.change) -- plugin.opts: Loading the plugin
+  adapters.plugin.inject(domain.plugin.change) -- plugin.keys and plugin.opts: Parsing the spec
   adapters.keymaps.inject(domain.keymaps.change) -- lazyvim.config.keymaps.lua on VeryLazy
   if has_leader_for_lsp() then
     adapters.lsp.inject(domain.lsp.change) -- lazyvim.plugins.lsp.keymaps: Attaching to a buffer

@@ -1,7 +1,6 @@
 --[[
 Test the adapters injecting code into LazyVim and lazy.nvim.
 --]]
--- NOTE: --> lsp adapter: Not tested in e2e.
 
 local assert = require("luassert")
 local h = require("tests.unit_helpers")
@@ -9,6 +8,13 @@ local h = require("tests.unit_helpers")
 local function get_dir()
   local f = debug.getinfo(1, "S").source:sub(2)
   return vim.fn.fnamemodify(f, ":p:h:h:h") or ""
+end
+
+local function gitsigns_on_attach()
+  require("gitsigns") -- The test does not invoke plugin.opts for gitsigns
+  local gitsigns_plugin = require("lazy.core.config").spec.plugins["gitsigns.nvim"]
+  local gitsigns_opts = require("lazy.core.plugin").values(gitsigns_plugin, "opts", false)
+  gitsigns_opts.on_attach(0) -- manually invoke on_attach
 end
 
 describe("lazymenu.nvim", function()
@@ -42,12 +48,11 @@ describe("lazymenu.nvim", function()
         dir = get_dir(),
         import = "lazymenu.hook",
         opts = function() -- WORKAROUNDS...
-          -- keymaps adapter: The autocommand in on_load is not triggered inside the test
+          -- keymaps and lsp adapter: The autocommand in on_load is not triggered inside the test
           ---@diagnostic disable-next-line: duplicate-set-field
           require("lazymenu.adapters.utils").on_load = function(name, callback)
             callback(name) -- load immediately
           end
-
           return { leaders_to_change = leaders_to_change }
         end,
       },
@@ -55,32 +60,19 @@ describe("lazymenu.nvim", function()
         "LazyVim/LazyVim",
         import = "lazyvim.plugins",
         opts = function(_, _) -- WORKAROUNDS...
-          -- values adapter: Trigger gitsigns. The test does not invoke gitsigns plugin.opts
-          local gitsigns = require("lazy.core.config").spec.plugins["gitsigns.nvim"]
-          local gitsigns_opts = require("lazy.core.plugin").values(gitsigns, "opts", false)
-          gitsigns_opts.on_attach(0) -- manually invoke on_attach
-
+          -- plugin adapter: Trigger gitsigns.
+          gitsigns_on_attach()
           -- keymaps adapter: Trigger keymaps in keymaps.lua
           require("lazyvim.config.keymaps") -- on very lazy, UIEnter is too late
-
           -- lsp adapter: Trigger the keymaps for the lps. Buffer 0
           require("lazyvim.plugins.lsp.keymaps").on_attach(_, 0)
         end,
       },
-      {
-        "lewis6991/gitsigns.nvim", -- WORKAROUNDS...
-        opts = {
-          -- values adapter: During test, the gitsigns spec in LazyVim contains package.loaded.gitsigns == nil
-          on_attach = function(buffer) -- override on_attach
-            vim.keymap.set({ "n" }, "<leader>ghS", function() end, { buffer = buffer, desc = "Test Stage Buffer" })
-          end,
-        },
-      },
     }, { install_missing = true })
 
-    assert(h.has_key(" So")) -- search options --> plugins adapter
-    assert(h.has_key(" GhS", 0)) -- gitsigns --> values adapter
-    assert(h.has_key(" Gg")) -- keymaps.lua --> keymaps adapter
-    assert(h.has_key(" Cl", 0)) -- lsp --> lsp adapter
+    assert(h.has_key(" So")) -- telescope search options --> plugin adapter
+    assert(h.has_key(" GhS", 0)) -- gitsigns --> plugin adapter, decorating on_attach
+    assert(h.has_key(" Gg")) -- lazygit in keymaps.lua --> keymaps adapter
+    assert(h.has_key(" Cl", 0)) -- lsp info --> lsp adapter
   end)
 end)
