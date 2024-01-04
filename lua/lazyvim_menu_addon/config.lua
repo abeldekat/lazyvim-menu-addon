@@ -1,3 +1,9 @@
+--[[
+Leaders in extras:
+TODO: d: dap.core
+p: coding.yanky
+TODO: t: test.core
+--]]
 local M = {}
 
 ---@class LazyVimMenuAddonConfig

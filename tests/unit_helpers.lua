@@ -29,21 +29,21 @@ end
 
 ---@param opts LazyVimMenuAddonConfig
 ---@return LazyVimMenuAddonPluginAdapter
-function M.plugin(opts, decorators)
+function M.plugin(opts, change_cbs)
   -- stylua: ignore
   return {
     get_opts = function() return opts end,
     inject = function(change_cb)
-      decorators["plugin"] = change_cb(function(_, plugin, _) return plugin end)
+      change_cbs["plugin"] = change_cb(function(_, plugin, _) return plugin end)
     end,
   }
 end
 
 ---@return LazyVimMenuAddonLspAdapter
-function M.lsp(decorators)
+function M.lsp(change_cbs)
   return {
     inject = function(change_cb)
-      decorators["lsp"] = change_cb(function(spec) ---param spec? (string|LazyKeysSpec)[]
+      change_cbs["lsp"] = change_cb(function(spec) ---param spec? (string|LazyKeysSpec)[]
         -- for testing: simulate the result by setting the keymap
         for _, item in ipairs(spec) do
           vim.keymap.set({ "n" }, item[1], item[2], { desc = item.desc })
@@ -54,10 +54,10 @@ function M.lsp(decorators)
 end
 
 ---@return LazyVimMenuAddonKeymapsAdapter
-function M.keymaps(decorators)
+function M.keymaps(change_cbs)
   return {
     inject = function(change_cb)
-      decorators["keymaps"] = change_cb(function(mode, lhs, rhs, opts)
+      change_cbs["keymaps"] = change_cb(function(mode, lhs, rhs, opts)
         vim.keymap.set(mode, lhs, rhs, opts)
       end)
     end,
@@ -65,20 +65,20 @@ function M.keymaps(decorators)
 end
 
 -- Simulate activation by lazy.nvim
-local function run(decorators, test_input)
+local function run(change_cbs, test_input)
   if test_input.spec then -- plugin adapter
     for _, plugin in ipairs(test_input.spec) do
-      decorators.plugin(_, plugin) -- plugin
+      change_cbs.plugin(_, plugin) -- plugin
     end
   end
 
   if test_input.keyspec then -- lsp adapter
-    decorators.lsp(test_input.keyspec)
+    change_cbs.lsp(test_input.keyspec)
   end
 
   if test_input.keymaps then -- keymaps adapter
     for _, keymap in ipairs(test_input.keymaps) do
-      decorators.keymaps({ "n" }, keymap[1], keymap[2], keymap[3])
+      change_cbs.keymaps({ "n" }, keymap[1], keymap[2], keymap[3])
     end
   end
 end
@@ -86,14 +86,14 @@ end
 -- activate lazyvim-menu-addon. See lazyvim_menu_addon.hook
 ---@param opts LazyVimMenuAddonConfig
 function M.activate(opts, test_input)
-  -- run: contains decorated functions created in each fake_adapter.inject
-  local decorators = {}
+  -- Contains domain callback functions created in each fake_adapter.inject
+  local change_cbs = {}
 
   ---@type LazyVimMenuAddonAdapters
   local fake_adapters = {
-    plugin = M.plugin(opts, decorators),
-    lsp = M.lsp(decorators),
-    keymaps = M.keymaps(decorators),
+    plugin = M.plugin(opts, change_cbs),
+    lsp = M.lsp(change_cbs),
+    keymaps = M.keymaps(change_cbs),
   }
 
   ---@type LazyVimMenuAddonDomain
@@ -104,7 +104,7 @@ function M.activate(opts, test_input)
   }
 
   local dummy_spec = require("lazyvim_menu_addon").on_hook(fake_adapters, domain)
-  run(decorators, test_input) -- all code is injected: run
+  run(change_cbs, test_input) -- all code is injected: run
 
   return dummy_spec
 end

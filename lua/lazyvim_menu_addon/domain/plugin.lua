@@ -67,7 +67,7 @@ end
 
 -- Change leader keys in plugin.keys
 -- Change leader keys in plugin.opts
--- In current LazyVim, plugin.keys is always a table
+-- In LazyVim v10.8.2, plugin.keys is always a table(mini.surround does not contain leader keys)
 --
 ---@param add_cb fun(_, plugin:LazyPlugin, results?:string[])
 ---@return fun(_, plugin:LazyPlugin, results?:string[]):LazyPlugin
