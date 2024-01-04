@@ -9,7 +9,7 @@ local defaults = {
     --
     -- TODO: tabs?
     --
-    -- ["<tabs"] = "T", -- tabs
+    -- ["<tab>"] = "T", -- tabs
     -- b = "B", -- buffer
     -- c = "C", -- code
     -- f = "F", -- file/find
