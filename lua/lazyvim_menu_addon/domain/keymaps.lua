@@ -1,5 +1,5 @@
-local Utils = require("lazymenu.domain.utils")
----@class LazyMenuKeymapsDomain
+local Utils = require("lazyvim_menu_addon.domain.utils")
+---@class LazyVimMenuAddonKeymapsDomain
 local M = {}
 
 -- Remaps keys defined in LazyVim's keymaps.lua

@@ -1,14 +1,14 @@
-# lazymenu.nvim
+# lazyvim-menu-addon
 
-Facilitates remapping the leader menus created by `LazyVim`
+Facilitates changing the top level leader menus created by `LazyVim`
 
-Work in progress...
+Work in progress... *Almost* done.
 
 ```lua
     -- Example: move all menu-items defined in LazyVim for leader f to leader F
     { 
-      "abeldekat/lazymenu.nvim", 
-      import = "lazymenu.hook", 
+      "abeldekat/lazyvim-menu-addon",
+      import = "lazyvim_menu_addon.hook",
       opts = { to_change = { f = "F" } } 
     },
     -- add LazyVim and import its plugins

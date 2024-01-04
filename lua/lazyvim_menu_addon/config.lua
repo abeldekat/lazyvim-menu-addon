@@ -1,6 +1,6 @@
 local M = {}
 
----@class LazyMenuConfig
+---@class LazyVimMenuAddonConfig
 local defaults = {
   -- Select the leaders to change and the new value to use:
   ---@type table<string,string>
@@ -35,12 +35,12 @@ local defaults = {
   },
 }
 
----@type LazyMenuConfig
+---@type LazyVimMenuAddonConfig
 M.options = {}
 
----@param opts_supplied LazyMenuConfig
+---@param opts_supplied LazyVimMenuAddonConfig
 M.setup = function(opts_supplied)
-  ---@class LazyMenuConfig
+  ---@class LazyVimMenuAddonConfig
   M.options = vim.tbl_deep_extend("force", defaults, opts_supplied or {}) or {}
   local to_change = M.options.leaders_to_change
   if not (to_change and type(to_change) == "table" and not vim.tbl_isempty(to_change)) then

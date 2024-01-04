@@ -1,5 +1,5 @@
-local Utils = require("lazymenu.domain.utils")
----@class LazyMenuLspDomain
+local Utils = require("lazyvim_menu_addon.domain.utils")
+---@class LazyVimMenuAddonLspDomain
 local M = {}
 
 -- NOTE: LazyVim defines lsp keymapping in LazyKeysSpec format

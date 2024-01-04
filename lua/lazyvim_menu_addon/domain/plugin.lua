@@ -1,7 +1,7 @@
-local Config = require("lazymenu.config")
-local Utils = require("lazymenu.domain.utils")
+local Config = require("lazyvim_menu_addon.config")
+local Utils = require("lazyvim_menu_addon.domain.utils")
 
----@class LazyMenuPluginDomain
+---@class LazyVimMenuAddonPluginDomain
 local M = {}
 
 -- Property contains key-value pairs to change

@@ -1,7 +1,7 @@
 -- TODO: Document limitations for leader c(lsp) or consider decorating lspconfig.init
--- TODO: Rename the project to lazyvim-menu-addon
+-- TODO: Also include plugin.keys as function
 
-local Config = require("lazymenu.config")
+local Config = require("lazyvim_menu_addon.config")
 local M = {}
 
 -- The user wants to remap a leader containing lsp mappings
@@ -15,8 +15,8 @@ local function has_leader_for_lsp()
 end
 
 -- The main init method, called when the import is required by lazy.nvim
----@param adapters LazyMenuAdapters
----@param domain LazyMenuDomain
+---@param adapters LazyVimMenuAddonAdapters
+---@param domain LazyVimMenuAddonDomain
 ---@return table
 function M.on_hook(adapters, domain)
   Config.setup(adapters.plugin.get_opts())

@@ -1,14 +1,14 @@
----@class LazyMenuPluginAdapter
+---@class LazyVimMenuAddonPluginAdapter
 local M = {}
 
----@return LazyMenuConfig
+---@return LazyVimMenuAddonConfig
 function M.get_opts()
-  local lazymenu_plugin = require("lazy.core.config").spec.plugins["lazymenu.nvim"]
+  local plugin = require("lazy.core.config").spec.plugins["lazyvim-menu-addon"]
 
-  ---@type LazyMenuConfig | fun(LazyPlugin, opts:table):LazyMenuConfig
-  local opts = lazymenu_plugin.opts or {}
+  ---@type LazyVimMenuAddonConfig | fun(LazyPlugin, opts:table):LazyVimMenuAddonConfig
+  local opts = plugin.opts or {}
   if type(opts) == "function" then
-    return opts(lazymenu_plugin, {})
+    return opts(plugin, {})
   end
   return opts
 end

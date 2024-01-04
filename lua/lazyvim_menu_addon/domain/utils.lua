@@ -1,4 +1,4 @@
-local Config = require("lazymenu.config")
+local Config = require("lazyvim_menu_addon.config")
 local M = {}
 
 -- The fragment of a plugin is defined in LazyVim, not by the user

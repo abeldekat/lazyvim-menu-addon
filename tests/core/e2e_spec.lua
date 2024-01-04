@@ -17,7 +17,7 @@ local function gitsigns_on_attach()
   gitsigns_opts.on_attach(0) -- manually invoke on_attach
 end
 
-describe("lazymenu.nvim", function()
+describe("lazyvim-menu-addon", function()
   before_each(function()
     vim.g.lazy_did_setup = false
     vim.go.loadplugins = true
@@ -44,13 +44,13 @@ describe("lazymenu.nvim", function()
         },
       },
       {
-        "abeldekat/lazymenu.nvim",
+        "abeldekat/lazyvim-menu-addon",
         dir = get_dir(),
-        import = "lazymenu.hook",
+        import = "lazyvim_menu_addon.hook",
         opts = function() -- WORKAROUNDS...
           -- keymaps and lsp adapter: The autocommand in on_load is not triggered inside the test
           ---@diagnostic disable-next-line: duplicate-set-field
-          require("lazymenu.adapters.utils").on_load = function(name, callback)
+          require("lazyvim_menu_addon.adapters.utils").on_load = function(name, callback)
             callback(name) -- load immediately
           end
           return { leaders_to_change = leaders_to_change }

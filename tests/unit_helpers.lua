@@ -27,8 +27,8 @@ function M.lazy_keys_result(spec)
   return result
 end
 
----@param opts LazyMenuConfig
----@return LazyMenuPluginAdapter
+---@param opts LazyVimMenuAddonConfig
+---@return LazyVimMenuAddonPluginAdapter
 function M.plugin(opts, decorators)
   -- stylua: ignore
   return {
@@ -39,7 +39,7 @@ function M.plugin(opts, decorators)
   }
 end
 
----@return LazyMenuLspAdapter
+---@return LazyVimMenuAddonLspAdapter
 function M.lsp(decorators)
   return {
     inject = function(change_cb)
@@ -53,7 +53,7 @@ function M.lsp(decorators)
   }
 end
 
----@return LazyMenuKeymapsAdapter
+---@return LazyVimMenuAddonKeymapsAdapter
 function M.keymaps(decorators)
   return {
     inject = function(change_cb)
@@ -83,27 +83,27 @@ local function run(decorators, test_input)
   end
 end
 
--- activate lazymenu. See lazymenu.hook
----@param opts LazyMenuConfig
+-- activate lazyvim-menu-addon. See lazyvim_menu_addon.hook
+---@param opts LazyVimMenuAddonConfig
 function M.activate(opts, test_input)
   -- run: contains decorated functions created in each fake_adapter.inject
   local decorators = {}
 
-  ---@type LazyMenuAdapters
+  ---@type LazyVimMenuAddonAdapters
   local fake_adapters = {
     plugin = M.plugin(opts, decorators),
     lsp = M.lsp(decorators),
     keymaps = M.keymaps(decorators),
   }
 
-  ---@type LazyMenuDomain
+  ---@type LazyVimMenuAddonDomain
   local domain = {
-    plugin = require("lazymenu.domain.plugin"),
-    lsp = require("lazymenu.domain.lsp"),
-    keymaps = require("lazymenu.domain.keymaps"),
+    plugin = require("lazyvim_menu_addon.domain.plugin"),
+    lsp = require("lazyvim_menu_addon.domain.lsp"),
+    keymaps = require("lazyvim_menu_addon.domain.keymaps"),
   }
 
-  local dummy_spec = require("lazymenu").on_hook(fake_adapters, domain)
+  local dummy_spec = require("lazyvim_menu_addon").on_hook(fake_adapters, domain)
   run(decorators, test_input) -- all code is injected: run
 
   return dummy_spec
