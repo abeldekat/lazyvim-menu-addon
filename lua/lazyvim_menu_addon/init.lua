@@ -1,6 +1,14 @@
 -- TODO: Document limitations for leader c(lsp) or consider decorating lspconfig.init
--- TODO: Extras: Vscode Add some vscode specific keymaps: pattern = LazyVimKeymaps
--- This is called in config.load
+-- TODO: lsp consider wrapping vim.keymap.set, see keymaps.lua L97
+--
+-- TODO: Extras: Vscode specific keymaps: pattern = LazyVimKeymaps, executed in config.load
+--> Document: Inside vscode, when changing leader S, still a leader s s will be created
+
+-- TODO: extras.lang.java: L168, which-key register: vim.api.nvim_create_autocmd("LspAttach"
+--> wrap the autocommand of which-key.register. The keys are created in which-key.register!
+--> nvim-jdtls: additional keymaps in opts.on_attach()
+
+-- TODO: extras.lang.tex:         ["<localLeader>l"] = { name = "+vimtex" },
 
 local Config = require("lazyvim_menu_addon.config")
 local M = {}

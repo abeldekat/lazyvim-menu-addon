@@ -19,7 +19,7 @@ Work in progress... *Almost* done.
 
 ## NOTES
 
-## Example: Inventory for renaming `leader` c into `leader` C
+## Example Inventory for `leader` c
 
 ### LazyVim standard menu items
 
@@ -38,13 +38,13 @@ Work in progress... *Almost* done.
 {
   defaults = {
     -- key descriptions
-    ["<leader>C"] = "+coding"
+    ["<leader>c"] = "+coding"
     -- more key descriptions
   }
 }
 ```
 
-## Adding `extras.langs`
+### Adding `extras.langs`
 
 For example: typescript
 
