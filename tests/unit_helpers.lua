@@ -12,21 +12,6 @@ function M.has_key(key, buffer)
   return false
 end
 
---- Returns all "lhs" from each plugin.keys
---- In the unit tests, plugin.keys should be of type LazyKeysSpec[]
----@return string[]
-function M.lazy_keys_result(spec)
-  local result = {}
-  for _, plugin in ipairs(spec) do
-    if plugin.keys then
-      for _, key in ipairs(plugin.keys) do
-        table.insert(result, key[1])
-      end
-    end
-  end
-  return result
-end
-
 ---@param opts LazyVimMenuAddonConfig
 ---@return LazyVimMenuAddonPluginAdapter
 function M.plugin(opts, change_cbs)

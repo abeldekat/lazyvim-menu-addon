@@ -3,6 +3,7 @@ local Utils = require("lazyvim_menu_addon.domain.utils")
 
 ---@class LazyVimMenuAddonPluginDomain
 local M = {}
+
 local Opts = {}
 local Keys = {}
 

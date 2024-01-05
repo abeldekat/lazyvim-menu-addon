@@ -2,9 +2,25 @@ local assert = require("luassert")
 local h = require("tests.unit_helpers")
 local dummy_action = function() end
 
-describe("a leader key", function()
-  local function get_spec()
-    return {
+--- Returns all "lhs" from each plugin.keys
+--- In the unit tests, plugin.keys should be of type LazyKeysSpec[]
+---@return string[]
+local function lazy_keys_result(spec)
+  local result = {}
+  for _, plugin in ipairs(spec) do
+    if plugin.keys then
+      for _, key in ipairs(plugin.keys) do
+        table.insert(result, key[1])
+      end
+    end
+  end
+  return result
+end
+
+describe("a leader key inside plugin.keys", function()
+  local opts = { leaders_to_change = { f = "F" } }
+  local function get_spec(extraspec)
+    local spec = {
       {
         name = "neo-tree.nvim",
         _ = { module = "lazyvim.plugins.editor" },
@@ -18,17 +34,32 @@ describe("a leader key", function()
       {
         name = "harpoon.nvim", -- plugin added by the user
         _ = { module = "plugins.editor" },
-        keys = { { "<leader>f", dummy_action, desc = "Harpoon on leader f" } },
+        keys = { { "<leader>ff", dummy_action, desc = "Harpoon ui" } },
       },
     }
+    vim.tbl_extend("force", spec, extraspec or {})
+    return spec
   end
   it("can be changed across all plugins defined in LazyVim", function()
-    local opts = { leaders_to_change = { f = "F" } }
     local spec = get_spec()
 
     h.activate(opts, { spec = spec })
 
-    assert.same({ "<leader>Fe", "<leader>Ff", "<leader>f" }, h.lazy_keys_result(spec))
+    assert.same({ "<leader>Fe", "<leader>Ff", "<leader>ff" }, lazy_keys_result(spec))
+  end)
+  it("can be changed when plugin.keys is a function ", function()
+    local spec = get_spec({
+      {
+        name = "harpoon.nvim",
+        keys = function(_, keys)
+          table.insert(keys, { "<leader>fa", dummy_action(), desc = "Harpoon add" })
+        end,
+      },
+    })
+
+    h.activate(opts, { spec = spec })
+
+    assert.same({ "<leader>Fe", "<leader>Ff", "<leader>ff", "<leader>fa" }, lazy_keys_result(spec))
   end)
 end)
 
@@ -136,7 +167,7 @@ describe("menu items in which-key.nvim", function()
     h.activate(menu_opts, { spec = spec })
 
     -- Telescope and Harpoon keys
-    assert.same({ "<leader>Sa", "<leader>sh" }, h.lazy_keys_result(spec))
+    assert.same({ "<leader>Sa", "<leader>sh" }, lazy_keys_result(spec))
 
     -- Changed which-key's opts, but not the fake telescope opts
     assert_plugin_opts(spec[1], { "<leader>S", "<leader>in" })
@@ -169,7 +200,7 @@ describe("menu items in which-key.nvim", function()
     h.activate(menu_opts, { spec = spec })
 
     -- Harpoon keys:
-    assert.same({ "<leader>sh" }, h.lazy_keys_result(spec))
+    assert.same({ "<leader>sh" }, lazy_keys_result(spec))
 
     --  Which-key's opts:
     assert_plugin_opts(spec[1], { "<leader>S", "<leader>in" })
