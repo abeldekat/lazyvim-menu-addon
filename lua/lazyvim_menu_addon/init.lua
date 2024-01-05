@@ -1,5 +1,6 @@
 -- TODO: Document limitations for leader c(lsp) or consider decorating lspconfig.init
--- TODO: Also include plugin.keys as function
+-- TODO: Extras: Vscode Add some vscode specific keymaps: pattern = LazyVimKeymaps
+-- This is called in config.load
 
 local Config = require("lazyvim_menu_addon.config")
 local M = {}

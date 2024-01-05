@@ -9,7 +9,7 @@ Work in progress... *Almost* done.
     { 
       "abeldekat/lazyvim-menu-addon",
       import = "lazyvim_menu_addon.hook",
-      opts = { to_change = { f = "F" } } 
+      opts = { leaders_to_change = { f = "F" } } 
     },
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },

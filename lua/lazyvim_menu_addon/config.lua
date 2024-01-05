@@ -1,9 +1,3 @@
---[[
-Leaders in extras:
-TODO: d: dap.core
-p: coding.yanky
-TODO: t: test.core
---]]
 local M = {}
 
 ---@class LazyVimMenuAddonConfig
@@ -34,6 +28,8 @@ local defaults = {
   change_in_opts = {
     ["which-key.nvim"] = "defaults", -- contains a table with keys and menu descriptions
     ["gitsigns.nvim"] = "on_attach", -- contains a function defining keys for leader g
+    -- extras:
+    -- ["edgy.nvim"] = "keys", -- contains a table with keys(no leaders) the user can override
   },
 }
 
