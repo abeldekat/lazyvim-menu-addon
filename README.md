@@ -19,11 +19,34 @@ Work in progress... *Almost* done.
 
 ## NOTES
 
-Example: Rename leader c to leader C:
+## Example: Inventory for renaming `leader` c into `leader` C
 
-- `Mason`: keys from plugin definition
-- `Format Injected Langs`: keys from plugin definition
-- `LSP related`: The keys are created on_attach for each buffer:
-  source action, code action, lsp info, rename
-- `lazyvim.config.keymaps`: Format and Line diagnostics
-- `Which-key`: the `["<leader>c"]` = "+coding" definition in its opts.defaults
+### LazyVim standard menu items
+
+- `ca`-"Code Action": `nvim-lspconfig` in `lazyvim.plugin.lsp.keymaps`
+- `cA`-"Source Action": `nvim-lspconfig` in `lazyvim.plugin.lsp.keymaps`
+- `cd`-"Line Diagnostics": *generic key* in `lazyvim.config.keymaps`
+- `cf`-"Format": *generic key* in `lazyvim.config.keymaps`
+- `cF`-"Format Injected Langs": `conform.nvim` in `lazyvim.plugins.format`
+- `cl`-"Lsp Info": `nvim-lspconfig` in `lazyvim.plugin.lsp.keymaps`
+- `cm`-"Mason": `mason.nvim` in `lazyvim.plugin.lsp`
+- `cr`-"Rename": `mason.nvim` in `lazyvim.plugin.lsp`
+
+### Menu description in `which-key.nvim`
+
+```lua
+{
+  defaults = {
+    -- key descriptions
+    ["<leader>C"] = "+coding"
+    -- more key descriptions
+  }
+}
+```
+
+## Adding `extras.langs`
+
+For example: typescript
+
+- `co`-"Organize Imports": `nvim-lspconfig` in `lazyvim.plugins.extras.lang.typescript`
+- `cR`-"Remove Unused Imports": `nvim-lspconfig` in `lazyvim.plugins.extras.lang.typescript`
