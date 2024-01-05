@@ -3,13 +3,16 @@ local h = require("tests.unit_helpers")
 local dummy_action = function() end
 
 --- Returns all "lhs" from each plugin.keys
---- In the unit tests, plugin.keys should be of type LazyKeysSpec[]
+--- In the unit tests, plugin.keys should be:
+--    a function returning type LazyKeysSpec[]
+--    or a table containing type LazyKeysSpec[]
 ---@return string[]
 local function lazy_keys_result(spec)
   local result = {}
   for _, plugin in ipairs(spec) do
     if plugin.keys then
-      for _, key in ipairs(plugin.keys) do
+      local keys = type(plugin.keys) == "function" and plugin.keys(_, {}) or plugin.keys
+      for _, key in ipairs(keys) do
         table.insert(result, key[1])
       end
     end
@@ -20,7 +23,7 @@ end
 describe("a leader key inside plugin.keys", function()
   local opts = { leaders_to_change = { f = "F" } }
   local function get_spec(extraspec)
-    local spec = {
+    local result = {
       {
         name = "neo-tree.nvim",
         _ = { module = "lazyvim.plugins.editor" },
@@ -37,14 +40,11 @@ describe("a leader key inside plugin.keys", function()
         keys = { { "<leader>ff", dummy_action, desc = "Harpoon ui" } },
       },
     }
-    vim.tbl_extend("force", spec, extraspec or {})
-    return spec
+    return vim.list_extend(result, extraspec or {})
   end
   it("can be changed across all plugins defined in LazyVim", function()
     local spec = get_spec()
-
     h.activate(opts, { spec = spec })
-
     assert.same({ "<leader>Fe", "<leader>Ff", "<leader>ff" }, lazy_keys_result(spec))
   end)
   it("can be changed when plugin.keys is a function ", function()
@@ -53,12 +53,11 @@ describe("a leader key inside plugin.keys", function()
         name = "harpoon.nvim",
         keys = function(_, keys)
           table.insert(keys, { "<leader>fa", dummy_action(), desc = "Harpoon add" })
+          return keys
         end,
       },
     })
-
     h.activate(opts, { spec = spec })
-
     assert.same({ "<leader>Fe", "<leader>Ff", "<leader>ff", "<leader>fa" }, lazy_keys_result(spec))
   end)
 end)
@@ -138,12 +137,8 @@ describe("menu items in which-key.nvim", function()
         end,
       },
     }
-    for _, spec in ipairs(extra_spec) do
-      table.insert(result, spec)
-    end
-    return result
+    return vim.list_extend(result, extra_spec or {})
   end
-
   it("can be changed", function()
     local spec = get_spec({
       {
@@ -174,7 +169,6 @@ describe("menu items in which-key.nvim", function()
     assert_plugin_opts(spec[2], { "<leader>Sn" })
     assert_plugin_opts(spec[3], { "<leader>s", "<leader>sn" })
   end)
-
   it("are changed only when defined in LazyVim", function()
     local function assert_description(plugin, key_expected, description_expected)
       local opts = type(plugin.opts) == "function" and plugin.opts(_, {}) or plugin.opts

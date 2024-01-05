@@ -70,11 +70,23 @@ function Opts.change(opts_to_change, prop)
 end
 
 -- Change leader keys in plugin.keys
-function Keys.change(keys)
-  return vim.tbl_map(function(lazy_mapping)
-    lazy_mapping[1] = Utils.change_when_matched(lazy_mapping[1])
-    return lazy_mapping
-  end, keys)
+function Keys.change(keys_to_change)
+  local function modify(keys)
+    return vim.tbl_map(function(lazy_mapping)
+      lazy_mapping[1] = Utils.change_when_matched(lazy_mapping[1])
+      return lazy_mapping
+    end, keys)
+  end
+
+  ---@return fun(_, keys:table):table
+  local function inject()
+    return function(_, merged_keys) -- called in lazy.core.handler.init.resolve
+      local result = keys_to_change(_, merged_keys) or merged_keys
+      return modify(result)
+    end
+  end
+
+  return type(keys_to_change) == "function" and inject() or modify(keys_to_change)
 end
 
 -- Change leader keys in plugin.keys
@@ -96,7 +108,7 @@ function M.change(add_cb)
     end
 
     local keys = rawget(plugin, "keys")
-    if keys and type(keys) == "table" then
+    if keys then
       plugin.keys = Keys.change(keys)
     end
 
