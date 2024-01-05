@@ -93,15 +93,15 @@ end
 -- Change leader keys in plugin.opts
 -- In LazyVim v10.8.2, plugin.keys is always a table(mini.surround does not contain leader keys)
 --
----@param add_cb fun(_, plugin:LazyPlugin, results?:string[])
+---@param adapter_cb fun(_, plugin:LazyPlugin, results?:string[])
 ---@return fun(_, plugin:LazyPlugin, results?:string[]):LazyPlugin
-function M.change(add_cb)
+function M.change(adapter_cb)
   -- See lazy.core.plugins.spec.add
   ---@param _ LazySpec
   ---@param plugin LazyPlugin
   ---@param results? string[]
   return function(_, plugin, results)
-    plugin = add_cb(_, plugin, results) -- lazy.nvim adds and merges the fragment
+    plugin = adapter_cb(_, plugin, results) -- lazy.nvim adds and merges the fragment
 
     if not (plugin and type(plugin) == "table" and Utils.is_lazyvim_fragment(plugin)) then
       return plugin -- do not change plugin fragments defined by the user

@@ -1,5 +1,4 @@
 -- TODO: Document limitations for leader c(lsp) or consider decorating lspconfig.init
--- TODO: lsp consider wrapping vim.keymap.set, see keymaps.lua L97
 --
 -- TODO: Extras: Vscode specific keymaps: pattern = LazyVimKeymaps, executed in config.load
 --> Document: Inside vscode, when changing leader S, still a leader s s will be created
