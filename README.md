@@ -6,15 +6,20 @@
 to make it easy to customize and extend your config.
 
 This addon aims to help the user to completely change
-a top-level leader menu configured in [LazyVim].
+a top-level leader menu supplied by [LazyVim].
 
-The effort required to manually change a complete sub-menu can be considerable.
+The effort required to manually change a sub-menu can be considerable.
 For example, when changing `leader c` into `leader C`,
 each individual key listed in [Leader c in LazyVim] needs to be taken into consideration.
 
-This addon only changes leader mappings that are defined in **LazyVim**.
-Those mappings are available for the user to redefine.
+This addon only changes leader mappings that are defined in **LazyVim**:
 
+- keys in plugin definitions
+- which-key menu descriptions
+- keys defined in lazyvim.config.keymaps
+- keys in nvim-lspconfig
+
+Those mappings are available for the user to redefine.
 A decline in performance is not expected.
 
 ## Installation
