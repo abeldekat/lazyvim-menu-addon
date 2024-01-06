@@ -124,19 +124,6 @@ CONFIGURATION            *lazyvim-menu-addon-lazyvim-menu-addon-configuration*
         -- w = "W", -- window
         -- x = "X", -- diagnostics/quickfix
       },
-    
-      -- Hook into lsp key definitions when leaders_to_change applies to nvim-lspconfig:
-      leaders_in_lspconfig = { "<leader>c" },
-    
-      ----------------------------------------------
-      -- Not expected to change:
-      ---------------------------------------------
-      change_in_opts = { -- Hook into plugin.opts for certain plugins:
-        ["which-key.nvim"] = "defaults", -- a table with keys and menu descriptions
-        ["gitsigns.nvim"] = "on_attach", -- a function defining keys for leader g
-        -- extras:
-        -- ["edgy.nvim"] = "keys", -- a table with keys(no leaders) the user can override
-      },
     }
 <
 
@@ -255,13 +242,13 @@ actual key.
     }
     
     -- Mason, currently in lazyvim.plugins.lsp:
-      {
+    {
     
-        "williamboman/mason.nvim",
-        -- spec
-        keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
-        -- more of the spec
-      }
+      "williamboman/mason.nvim",
+      -- spec
+      keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
+      -- more of the spec
+    }
 <
 
 The keys in the current codebase are readable on first sight. No need to first
