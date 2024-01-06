@@ -8,11 +8,6 @@ Making sure the integration works -> see e2e_spec.lua
 Making sure lazyvim_menu_addon works -> see unit test specs
 --]]
 
--- don't use inside vscode
-if vim.g.vscode then
-  return {}
-end
-
 ---@type LazyVimMenuAddonAdapters
 local adapters = {
   plugin = require("lazyvim_menu_addon.adapters.plugin"),
