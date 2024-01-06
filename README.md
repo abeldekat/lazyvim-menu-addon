@@ -17,8 +17,6 @@ Work in progress... *Almost* done.
 
 ## TODO
 
-## NOTES
-
 ## Example Inventory for `leader` c
 
 ### LazyVim standard menu items
