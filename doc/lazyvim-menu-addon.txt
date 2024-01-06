@@ -23,23 +23,30 @@ LazyVim <https://github.com/LazyVim/LazyVim> is a Neovim setup powered by
 lazy.nvim <https://github.com/folke/lazy.nvim> to make it easy to customize and
 extend your config.
 
-This addon aims to help the user to completely change a top-level leader menu
-supplied by LazyVim <https://github.com/LazyVim/LazyVim>.
+**Use-case** Theuser wishes to change a top-level leader menu supplied by
+LazyVim <https://github.com/LazyVim/LazyVim>, in order to use the corresponding
+leader key for something else.
 
-The effort required to manually change a sub-menu can be considerable. For
-example, when changing `leader c` into `leader C`, each individual key listed
-in |lazyvim-menu-addon-leader-c-in-lazyvim| needs to be taken into
+The effort required to manually change a top-level menu can be considerable.
+For example, when changing `leader c` into `leader C`, each individual key
+listed in |lazyvim-menu-addon-leader-c-in-lazyvim| needs to be taken into
 consideration.
 
-This addon only changes leader mappings that are defined in **LazyVim**
+This addon will perform the changes automatically.
 
-- keysin plugin definitions
+**Features** Leaderkeys will be changed when defined in:
+
+- plugin definitions
 - which-key menu descriptions
-- keys defined in lazyvim.config.keymaps
-- keys in nvim-lspconfig
+- lazyvim.config.keymaps
+- nvim-lspconfig
 
-Those mappings are available for the user to redefine. A decline in performance
-is not expected.
+Leader mappings defined by the user will not be modified.
+
+The addon is designed to change a leader key to an **available** new leader
+key.
+
+A decline in performance is not expected.
 
 
 INSTALLATION              *lazyvim-menu-addon-lazyvim-menu-addon-installation*
@@ -154,7 +161,7 @@ VSCODE EXTRA ~
 The vscode extra
 <https://github.com/LazyVim/LazyVim/blob/879e29504d43e9f178d967ecc34d482f902e5a91/lua/lazyvim/plugins/extras/vscode.lua#L31>
 defines a key for `leader s` that is not intercepted. When using vscode, please
-do not remap `leader s` using this addon.
+do not change `leader s` using this addon.
 
 
 JAVA EXTRA ~
@@ -163,7 +170,7 @@ The java extra
 <https://github.com/LazyVim/LazyVim/blob/879e29504d43e9f178d967ecc34d482f902e5a91/lua/lazyvim/plugins/extras/lang/java.lua#L174>
 is the only extra in `extras.lang` using `which-key.register` to map actual
 keys. That method is difficult to reliably intercept. When using the java
-extra, please do not remap `leader c` and `leader t` using this extra.
+extra, please do not change `leader c` and `leader t` using this addon.
 
 
 ADAPTERS                      *lazyvim-menu-addon-lazyvim-menu-addon-adapters*
@@ -219,8 +226,8 @@ ALTERNATIVES              *lazyvim-menu-addon-lazyvim-menu-addon-alternatives*
 THE MANUAL APPROACH ~
 
 LazyVim <https://github.com/LazyVim/LazyVim> provides a lot of flexibility when
-mapping individual keys. However, when the user wants to change a complete
-top-level menu, in order to use that `leader key` for something else, the
+mapping individual keys. However, when the user wants to change a top-level
+menu, in order to use that `leader key` for something else, the number of
 changes to perform can be considerable.
 
 _Note_
