@@ -6,6 +6,7 @@
 to make it easy to customize and extend your config.
 
 **Use-case**:
+
 The user wishes to change a top-level leader menu supplied by [LazyVim],
 in order to use the corresponding leader key for something else.
 
@@ -16,6 +17,7 @@ each individual key listed in [Leader c in LazyVim] needs to be taken into consi
 This addon will perform the changes automatically.
 
 **Features**:
+
 Leader keys will be changed when defined in:
 
 - plugin definitions
