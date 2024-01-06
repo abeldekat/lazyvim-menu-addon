@@ -25,10 +25,10 @@ Leader keys will be changed when defined in:
 - lazyvim.config.keymaps
 - nvim-lspconfig
 
-Leader mappings defined by the user will not be modified.
+Leader mappings defined by the user will **not** be modified.
 
 The addon is designed to change a leader key
-to an **available** new leader key.
+into an **available** new leader key.
 
 A decline in performance is not expected.
 
