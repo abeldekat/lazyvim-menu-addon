@@ -5,21 +5,29 @@
 [LazyVim] is a Neovim setup powered by [lazy.nvim]
 to make it easy to customize and extend your config.
 
-This addon aims to help the user to completely change
-a top-level leader menu supplied by [LazyVim].
+**Use-case**:
+The user wishes to change a top-level leader menu supplied by [LazyVim],
+in order to use the corresponding leader key for something else.
 
-The effort required to manually change a sub-menu can be considerable.
+The effort required to manually change a top-level menu can be considerable.
 For example, when changing `leader c` into `leader C`,
 each individual key listed in [Leader c in LazyVim] needs to be taken into consideration.
 
-This addon only changes leader mappings that are defined in **LazyVim**:
+This addon will perform the changes automatically.
 
-- keys in plugin definitions
+**Features**:
+Leader keys will be changed when defined in:
+
+- plugin definitions
 - which-key menu descriptions
-- keys defined in lazyvim.config.keymaps
-- keys in nvim-lspconfig
+- lazyvim.config.keymaps
+- nvim-lspconfig
 
-Those mappings are available for the user to redefine.
+Leader mappings defined by the user will not be modified.
+
+The addon is designed to change a leader key
+to an **available** new leader key.
+
 A decline in performance is not expected.
 
 ## Installation
@@ -122,7 +130,7 @@ See also: [LazyVim docs: lsp keymaps](https://www.lazyvim.org/configuration/keym
 ### vscode extra
 
 The [vscode extra] defines a key for `leader s` that is not intercepted.
-When using vscode, please do not remap `leader s` using this addon.
+When using vscode, please do not change `leader s` using this addon.
 
 ### java extra
 
@@ -130,7 +138,7 @@ The [java extra] is the only extra in `extras.lang`
 using `which-key.register` to map actual keys.
 That method is difficult to reliably intercept.
 When using the java extra,
-please do not remap `leader c` and `leader t` using this extra.
+please do not change `leader c` and `leader t` using this addon.
 
 ## Adapters
 
@@ -179,9 +187,9 @@ For example: typescript
 ### The manual approach
 
 [LazyVim] provides a lot of flexibility when mapping individual keys.
-However, when the user wants to change a complete top-level menu,
+However, when the user wants to change a top-level menu,
 in order to use that `leader key` for something else,
-the changes to perform can be considerable.
+the number of changes to perform can be considerable.
 
 *Note*:
 
