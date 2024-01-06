@@ -21,15 +21,17 @@ local defaults = {
     -- x = "X", -- diagnostics/quickfix
   },
 
-  -- Hook into lsp keymaps when leaders_to_change contains leaders used in lspconfig:
-  leaders_in_lspconfig = { "<leader>c" }, -- on attach
+  -- Hook into lsp key definitions when leaders_to_change applies to nvim-lspconfig:
+  leaders_in_lspconfig = { "<leader>c" },
 
-  -- Hook into plugin.opts for certain plugins:
-  change_in_opts = {
-    ["which-key.nvim"] = "defaults", -- contains a table with keys and menu descriptions
-    ["gitsigns.nvim"] = "on_attach", -- contains a function defining keys for leader g
+  ----------------------------------------------
+  -- Not expected to change:
+  ---------------------------------------------
+  change_in_opts = { -- Hook into plugin.opts for certain plugins:
+    ["which-key.nvim"] = "defaults", -- a table with keys and menu descriptions
+    ["gitsigns.nvim"] = "on_attach", -- a function defining keys for leader g
     -- extras:
-    -- ["edgy.nvim"] = "keys", -- contains a table with keys(no leaders) the user can override
+    -- ["edgy.nvim"] = "keys", -- a table with keys(no leaders) the user can override
   },
 }
 
