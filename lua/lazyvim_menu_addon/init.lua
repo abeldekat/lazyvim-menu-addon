@@ -7,8 +7,6 @@
 --> document: Not possible to wrap wk.register: No way to know if keymappings are from LazyVim
 --> document: When using the java extra, do not remap leader c and leader t
 
--- TODO: extras.lang.tex:         ["<localLeader>l"] = { name = "+vimtex" },
-
 local Config = require("lazyvim_menu_addon.config")
 local M = {}
 
