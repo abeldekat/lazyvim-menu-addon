@@ -1,13 +1,15 @@
-*lazyvim-menu-addon.txt*    For Neovim >= 0.9.0   Last change: 2024 January 06
+*lazyvim-menu-addon.txt*    For Neovim >= 0.9.0   Last change: 2024 January 07
 
 ==============================================================================
 Table of Contents                       *lazyvim-menu-addon-table-of-contents*
 
 1. lazyvim-menu-addon                  |lazyvim-menu-addon-lazyvim-menu-addon|
+  - Demo                          |lazyvim-menu-addon-lazyvim-menu-addon-demo|
+  - Features                  |lazyvim-menu-addon-lazyvim-menu-addon-features|
   - Installation          |lazyvim-menu-addon-lazyvim-menu-addon-installation|
   - Examples                  |lazyvim-menu-addon-lazyvim-menu-addon-examples|
   - Configuration        |lazyvim-menu-addon-lazyvim-menu-addon-configuration|
-  - Current restrictions|lazyvim-menu-addon-lazyvim-menu-addon-current-restrictions|
+  - Current limitations|lazyvim-menu-addon-lazyvim-menu-addon-current-limitations|
   - Adapters                  |lazyvim-menu-addon-lazyvim-menu-addon-adapters|
   - Leader C in LazyVim|lazyvim-menu-addon-lazyvim-menu-addon-leader-c-in-lazyvim|
   - Alternatives          |lazyvim-menu-addon-lazyvim-menu-addon-alternatives|
@@ -36,9 +38,16 @@ consideration.
 
 This addon will perform the changes automatically.
 
-**Features**
 
-Leaderkeys will be changed when defined in:
+DEMO                              *lazyvim-menu-addon-lazyvim-menu-addon-demo*
+
+
+<https://github.com/abeldekat/lazyvim-menu-addon/assets/58370433/b0dbac52-acfb-4263-b56c-60cb4400b724>
+
+
+FEATURES                      *lazyvim-menu-addon-lazyvim-menu-addon-features*
+
+Leader keys will be changed when defined in:
 
 - plugin definitions
 - which-key menu descriptions
@@ -144,7 +153,7 @@ CONFIGURATION            *lazyvim-menu-addon-lazyvim-menu-addon-configuration*
 <
 
 
-CURRENT RESTRICTIONS*lazyvim-menu-addon-lazyvim-menu-addon-current-restrictions*
+CURRENT LIMITATIONS*lazyvim-menu-addon-lazyvim-menu-addon-current-limitations*
 
 
 NVIM-LSPCONFIG ~
@@ -152,9 +161,12 @@ NVIM-LSPCONFIG ~
 The algorithm changing keys for `nvim-lspconfig` does not differentiate between
 keys defined in `LazyVim`’s lsp keys
 <https://github.com/LazyVim/LazyVim/blob/879e29504d43e9f178d967ecc34d482f902e5a91/lua/lazyvim/plugins/lsp/keymaps.lua#L15>
-and keys defined by the user. Consequently, when changing `leader c`, any
-`leader c` defined by the user targeting `nvim-lspconfig` will be changed as
-well.
+and keys defined by the user.
+
+Consequently, when changing `leader c`, any `leader c` defined by the user
+targeting `nvim-lspconfig` will be changed as well.
+
+The user can use `leader c` for other actions.
 
 See also: LazyVim docs: lsp keymaps
 <https://www.lazyvim.org/configuration/keymaps#lsp-keymaps>
@@ -227,7 +239,9 @@ For example: typescript
 ALTERNATIVES              *lazyvim-menu-addon-lazyvim-menu-addon-alternatives*
 
 
-THE MANUAL APPROACH ~
+MANUALLY ~
+
+This is the current approach.
 
 LazyVim <https://github.com/LazyVim/LazyVim> provides a lot of flexibility when
 mapping individual keys. However, when the user wants to change a top-level
@@ -236,10 +250,10 @@ changes to perform can be considerable.
 
 _Note_
 
-Ipresume that this requirement is not that common.
+Ipresume that the use-case this addon addresses is not that common.
 
 
-PROVIDED BY LAZYVIM ~
+BUILTIN TO LAZYVIM ~
 
 See this PR <https://github.com/LazyVim/LazyVim/issues/2193> >feature:
 configurable single source of truth for keymaps
@@ -249,7 +263,7 @@ Each key mapping would require a string operation on the leader part and the
 actual key.
 
 >lua
-    -- suggested
+    -- PR, the suggested solution:
     {
       "PrefixCode" = "<leader>c",
       "KeymapMason" = "%PrefixCode%m",
@@ -257,7 +271,7 @@ actual key.
       ...
     }
     
-    -- Mason, currently in lazyvim.plugins.lsp:
+    -- Current codebase: mason.nvim in lazyvim.plugins.lsp:
     {
     
       "williamboman/mason.nvim",
@@ -267,11 +281,30 @@ actual key.
     }
 <
 
-The keys in the current codebase are readable on first sight. No need to first
-find out what the prefix is mapped to.
+**Opinion**
 
-The main reason this plugin exists is to provide an alternative to the proposed
-solution.
+_Pros_
+
+**All**keys would be configurable from one central location.
+
+_Cons_
+
+Thekeys in the current codebase are readable on first sight. No need to first
+find out what the prefix is mapped to. Also, having a definition file covering
+all keys reduces the independence of the modules in the codebase.
+
+_Purpose_ of the addon:
+
+This addon exists to provide an alternative approach to the proposed solution
+in the PR.
+
+The user is expected to change individual keys as usual. The knowledge gained
+by doing so is very valuable. After all, LazyVim
+<https://github.com/LazyVim/LazyVim> is intended to customize and extend _your_
+config.
+
+That said, this addon can be helpful when changing a top-level leader menu,
+with the intent to use the corresponding `leader` key for something else.
 
 _Note_
 
