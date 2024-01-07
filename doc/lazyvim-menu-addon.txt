@@ -255,15 +255,15 @@ Ipresume that the use-case this addon addresses is not that common.
 
 BUILTIN TO LAZYVIM ~
 
-See this PR <https://github.com/LazyVim/LazyVim/issues/2193> >feature:
-configurable single source of truth for keymaps
+See this feature request <https://github.com/LazyVim/LazyVim/issues/2193>
+>feature: configurable single source of truth for keymaps
 
-The solution proposed in this PR implicates a lot of changes to the codebase.
-Each key mapping would require a string operation on the leader part and the
-actual key.
+The solution proposed in this request implicates a lot of changes to the
+codebase. Each key mapping would require a string operation on the leader part
+and the actual key.
 
 >lua
-    -- PR, the suggested solution:
+    -- Feature request, the suggested solution:
     {
       "PrefixCode" = "<leader>c",
       "KeymapMason" = "%PrefixCode%m",
@@ -293,10 +293,10 @@ Thekeys in the current codebase are readable on first sight. No need to first
 find out what the prefix is mapped to. Also, having a definition file covering
 all keys reduces the independence of the modules in the codebase.
 
-_Purpose_ of the addon:
+_Purpose of the addon_
 
-This addon exists to provide an alternative approach to the proposed solution
-in the PR.
+Thisaddon provides an alternative approach to the proposed solution in the
+feature request <https://github.com/LazyVim/LazyVim/issues/2193>.
 
 The user is expected to change individual keys as usual. The knowledge gained
 by doing so is very valuable. After all, LazyVim
