@@ -208,15 +208,15 @@ I presume that the use-case this addon addresses is not that common.
 
 ### Builtin to LazyVim
 
-See this [PR]:
+See this [feature request]:
 > feature: configurable single source of truth for keymaps
 
-The solution proposed in this PR implicates a lot of changes to the codebase.
+The solution proposed in this request implicates a lot of changes to the codebase.
 Each key mapping would require a string operation on the leader part
 and the actual key.
 
 ```lua
--- PR, the suggested solution:
+-- Feature request, the suggested solution:
 {
   "PrefixCode" = "<leader>c",
   "KeymapMason" = "%PrefixCode%m",
@@ -247,10 +247,10 @@ No need to first find out what the prefix is mapped to.
 Also, having a definition file covering all keys
 reduces the independence of the modules in the codebase.
 
-*Purpose* of the addon:
+*Purpose of the addon*:
 
-This addon exists to provide an alternative approach
-to the proposed solution in the PR.
+This addon provides an alternative approach
+to the proposed solution in the [feature request].
 
 The user is expected to change individual keys as usual.
 The knowledge gained by doing so is very valuable.
@@ -276,4 +276,4 @@ supplied by this addon into the codebase of [LazyVim]
 [vscode extra]: https://github.com/LazyVim/LazyVim/blob/879e29504d43e9f178d967ecc34d482f902e5a91/lua/lazyvim/plugins/extras/vscode.lua#L31
 [java extra]: https://github.com/LazyVim/LazyVim/blob/879e29504d43e9f178d967ecc34d482f902e5a91/lua/lazyvim/plugins/extras/lang/java.lua#L174
 [Leader c in LazyVim]: #leader-c-in-lazyvim
-[PR]: https://github.com/LazyVim/LazyVim/issues/2193
+[feature request]: https://github.com/LazyVim/LazyVim/issues/2193
