@@ -16,7 +16,11 @@ each individual key listed in [Leader c in LazyVim] needs to be taken into consi
 
 This addon will perform the changes automatically.
 
-**Features**:
+## Demo
+
+<https://github.com/abeldekat/lazyvim-menu-addon/assets/58370433/b0dbac52-acfb-4263-b56c-60cb4400b724>
+
+## Features
 
 Leader keys will be changed when defined in:
 
@@ -31,10 +35,6 @@ The addon is designed to change a leader key
 into an **available** new leader key.
 
 A decline in performance is not expected.
-
-## Demo
-
-<https://github.com/abeldekat/lazyvim-menu-addon/assets/58370433/b0dbac52-acfb-4263-b56c-60cb4400b724>
 
 ## Installation
 
@@ -121,15 +121,18 @@ Map keys for `leader q` to quit and `leader w` to write.
 }
 ```
 
-## Current restrictions
+## Current limitations
 
 ### nvim-lspconfig
 
 The algorithm changing keys for `nvim-lspconfig` does not differentiate
 between keys defined in `LazyVim`'s [lsp keys] and keys defined by the user.
+
 Consequently, when changing `leader c`,
 any `leader c` defined by the user
 targeting `nvim-lspconfig` will be changed as well.
+
+The user can use `leader c` for other actions.
 
 See also: [LazyVim docs: lsp keymaps](https://www.lazyvim.org/configuration/keymaps#lsp-keymaps)
 
@@ -190,7 +193,9 @@ For example: typescript
 
 ## Alternatives
 
-### The manual approach
+### Manually
+
+This is the current approach.
 
 [LazyVim] provides a lot of flexibility when mapping individual keys.
 However, when the user wants to change a top-level menu,
@@ -199,9 +204,9 @@ the number of changes to perform can be considerable.
 
 *Note*:
 
-I presume that this requirement is not that common.
+I presume that the use-case this addon addresses is not that common.
 
-### Provided by LazyVim
+### Builtin to LazyVim
 
 See this [PR]:
 > feature: configurable single source of truth for keymaps
@@ -211,7 +216,7 @@ Each key mapping would require a string operation on the leader part
 and the actual key.
 
 ```lua
--- suggested
+-- PR, the suggested solution:
 {
   "PrefixCode" = "<leader>c",
   "KeymapMason" = "%PrefixCode%m",
@@ -219,7 +224,7 @@ and the actual key.
   ...
 }
 
--- Mason, currently in lazyvim.plugins.lsp:
+-- Current codebase: mason.nvim in lazyvim.plugins.lsp:
 {
 
   "williamboman/mason.nvim",
@@ -229,11 +234,30 @@ and the actual key.
 }
 ```
 
+**Opinion**:
+
+*Pros*:
+
+**All** keys would be configurable from one central location.
+
+*Cons*:
+
 The keys in the current codebase are readable on first sight.
 No need to first find out what the prefix is mapped to.
+Also, having a definition file covering all keys
+reduces the independence of the modules in the codebase.
 
-The main reason this plugin exists
-is to provide an alternative to the proposed solution.
+*Purpose* of the addon:
+
+This addon exists to provide an alternative approach
+to the proposed solution in the PR.
+
+The user is expected to change individual keys as usual.
+The knowledge gained by doing so is very valuable.
+After all, [LazyVim] is intended to customize and extend *your* config.
+
+That said, this addon can be helpful when changing a top-level leader menu,
+with the intent to use the corresponding `leader` key for something else.
 
 *Note*:
 
