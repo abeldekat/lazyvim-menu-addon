@@ -134,7 +134,10 @@ targeting `nvim-lspconfig` will be changed as well.
 
 The user can use `leader c` for other actions.
 
-See also: [LazyVim docs: lsp keymaps](https://www.lazyvim.org/configuration/keymaps#lsp-keymaps)
+Changing keys for the lsp is explained in the [docs]:
+
+[lsp keymaps](https://www.lazyvim.org/configuration/keymaps#lsp-keymaps)
+[customizing lsp keymaps](https://www.lazyvim.org/plugins/lsp#%EF%B8%8F-customizing-lsp-keymaps)
 
 ### vscode extra
 
