@@ -32,6 +32,10 @@ into an **available** new leader key.
 
 A decline in performance is not expected.
 
+## Demo
+
+<https://github.com/abeldekat/lazyvim-menu-addon/assets/58370433/b0dbac52-acfb-4263-b56c-60cb4400b724>
+
 ## Installation
 
 ```lua
