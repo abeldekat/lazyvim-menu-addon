@@ -1,4 +1,4 @@
-*lazyvim-menu-addon.txt*    For Neovim >= 0.9.0   Last change: 2024 January 07
+*lazyvim-menu-addon.txt*    For Neovim >= 0.9.0   Last change: 2024 January 08
 
 ==============================================================================
 Table of Contents                       *lazyvim-menu-addon-table-of-contents*
@@ -11,7 +11,7 @@ Table of Contents                       *lazyvim-menu-addon-table-of-contents*
   - Configuration        |lazyvim-menu-addon-lazyvim-menu-addon-configuration|
   - Current limitations|lazyvim-menu-addon-lazyvim-menu-addon-current-limitations|
   - Adapters                  |lazyvim-menu-addon-lazyvim-menu-addon-adapters|
-  - Leader C in LazyVim|lazyvim-menu-addon-lazyvim-menu-addon-leader-c-in-lazyvim|
+  - Example: Leader c in LazyVim|lazyvim-menu-addon-lazyvim-menu-addon-example:-leader-c-in-lazyvim|
   - Alternatives          |lazyvim-menu-addon-lazyvim-menu-addon-alternatives|
   - Acknowledgements  |lazyvim-menu-addon-lazyvim-menu-addon-acknowledgements|
 
@@ -31,10 +31,10 @@ Theuser wishes to change a top-level leader menu supplied by LazyVim
 <https://github.com/LazyVim/LazyVim>, in order to use the corresponding leader
 key for something else.
 
-The effort required to manually change a top-level menu can be considerable.
-For example, when changing `leader c` into `leader C`, each individual key
-listed in |lazyvim-menu-addon-leader-c-in-lazyvim| needs to be taken into
-consideration.
+The effort required to do so manually can be considerable.
+
+For example, when changing `leader c` into `leader C`, each individual
+|lazyvim-menu-addon-`leader-c`| key needs to be taken into consideration.
 
 This addon will perform the changes automatically.
 
@@ -168,11 +168,10 @@ targeting `nvim-lspconfig` will be changed as well.
 
 The user can use `leader c` for other actions.
 
-Changing keys for the lsp is explained in the [docs]:
+Changing keys for the lsp is explained in the docs <https://www.lazyvim.org/>
 
-lsp keymaps <https://www.lazyvim.org/configuration/keymaps#lsp-keymaps>
-customizing lsp keymaps
-<https://www.lazyvim.org/plugins/lsp#%EF%B8%8F-customizing-lsp-keymaps>
+- lspkeymaps <https://www.lazyvim.org/configuration/keymaps#lsp-keymaps>
+- customizing lsp keymaps <https://www.lazyvim.org/plugins/lsp#%EF%B8%8F-customizing-lsp-keymaps>
 
 
 VSCODE EXTRA ~
@@ -201,7 +200,7 @@ This addon injects code into the following methods:
 - `LazyVim safe-keymap-set` <https://github.com/LazyVim/LazyVim/blob/879e29504d43e9f178d967ecc34d482f902e5a91/lua/lazyvim/util/init.lua#L149>
 
 
-LEADER C IN LAZYVIM*lazyvim-menu-addon-lazyvim-menu-addon-leader-c-in-lazyvim*
+EXAMPLE: LEADER C IN LAZYVIM*lazyvim-menu-addon-lazyvim-menu-addon-example:-leader-c-in-lazyvim*
 
 An overview of all `<leader> c` occurrences in the current codebase.
 
