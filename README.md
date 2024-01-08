@@ -10,9 +10,11 @@ to make it easy to customize and extend your config.
 The user wishes to change a top-level leader menu supplied by [LazyVim],
 in order to use the corresponding leader key for something else.
 
-The effort required to manually change a top-level menu can be considerable.
+The effort required to do so manually can be considerable.
+
 For example, when changing `leader c` into `leader C`,
-each individual key listed in [Leader c in LazyVim] needs to be taken into consideration.
+each individual [`leader c`](#example-leader-c-in-lazyvim) key
+needs to be taken into consideration.
 
 This addon will perform the changes automatically.
 
@@ -136,8 +138,8 @@ The user can use `leader c` for other actions.
 
 Changing keys for the lsp is explained in the [docs]:
 
-[lsp keymaps](https://www.lazyvim.org/configuration/keymaps#lsp-keymaps)
-[customizing lsp keymaps](https://www.lazyvim.org/plugins/lsp#%EF%B8%8F-customizing-lsp-keymaps)
+- [lsp keymaps](https://www.lazyvim.org/configuration/keymaps#lsp-keymaps)
+- [customizing lsp keymaps](https://www.lazyvim.org/plugins/lsp#%EF%B8%8F-customizing-lsp-keymaps)
 
 ### vscode extra
 
@@ -160,7 +162,7 @@ This addon injects code into the following methods:
 - [`LazyVim lsp keymaps`](https://github.com/LazyVim/LazyVim/blob/879e29504d43e9f178d967ecc34d482f902e5a91/lua/lazyvim/plugins/lsp/keymaps.lua#L15)
 - [`LazyVim safe-keymap-set`](https://github.com/LazyVim/LazyVim/blob/879e29504d43e9f178d967ecc34d482f902e5a91/lua/lazyvim/util/init.lua#L149)
 
-## Leader C in LazyVim
+## Example: Leader c in LazyVim
 
 An overview of all `<leader> c` occurrences in the current codebase.
 
@@ -274,9 +276,9 @@ supplied by this addon into the codebase of [LazyVim]
 
 [lazy.nvim]: https://github.com/folke/lazy.nvim
 [LazyVim]: https://github.com/LazyVim/LazyVim
+[docs]: https://www.lazyvim.org/
 [starter template]: https://github.com/LazyVim/starter/blob/92b2689e6f11004e65376e84912e61b9e6c58827/lua/config/lazy.lua#L12
 [lsp keys]: https://github.com/LazyVim/LazyVim/blob/879e29504d43e9f178d967ecc34d482f902e5a91/lua/lazyvim/plugins/lsp/keymaps.lua#L15
 [vscode extra]: https://github.com/LazyVim/LazyVim/blob/879e29504d43e9f178d967ecc34d482f902e5a91/lua/lazyvim/plugins/extras/vscode.lua#L31
 [java extra]: https://github.com/LazyVim/LazyVim/blob/879e29504d43e9f178d967ecc34d482f902e5a91/lua/lazyvim/plugins/extras/lang/java.lua#L174
-[Leader c in LazyVim]: #leader-c-in-lazyvim
 [feature request]: https://github.com/LazyVim/LazyVim/issues/2193
