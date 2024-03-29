@@ -1,4 +1,4 @@
-*lazyvim-menu-addon.txt*    For Neovim >= 0.9.0   Last change: 2024 January 08
+*lazyvim-menu-addon.txt*     For Neovim >= 0.9.0    Last change: 2024 March 29
 
 ==============================================================================
 Table of Contents                       *lazyvim-menu-addon-table-of-contents*
@@ -17,6 +17,8 @@ Table of Contents                       *lazyvim-menu-addon-table-of-contents*
 
 ==============================================================================
 1. lazyvim-menu-addon                  *lazyvim-menu-addon-lazyvim-menu-addon*
+
+20240329: This repository is archived.
 
 **lazyvim-menu-addon** is an add-on for LazyVim
 <https://github.com/LazyVim/LazyVim>.
