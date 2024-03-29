@@ -18,7 +18,7 @@ Table of Contents                       *lazyvim-menu-addon-table-of-contents*
 ==============================================================================
 1. lazyvim-menu-addon                  *lazyvim-menu-addon-lazyvim-menu-addon*
 
-20240329: This repository is archived.
+**Update** 20240329: This repository is archived.
 
 **lazyvim-menu-addon** is an add-on for LazyVim
 <https://github.com/LazyVim/LazyVim>.
