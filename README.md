@@ -1,5 +1,8 @@
 # lazyvim-menu-addon
 
+20240329: This repository is archived. 
+
+
 **lazyvim-menu-addon** is an add-on for [LazyVim].
 
 [LazyVim] is a Neovim setup powered by [lazy.nvim]
